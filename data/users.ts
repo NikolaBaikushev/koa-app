@@ -19,6 +19,11 @@ export const data: { users: User[] } = {
             id: 3,
             username: 'Misho',
             password: '123MishoAngelov'
+        },
+        {
+            id:4,
+            username: 'test',
+            password: 'test'
         }
     ] as User[]
 }
