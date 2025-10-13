@@ -1,5 +1,5 @@
 import Router from "@koa/router";
-import { data } from "../../data/users";
+import { data } from "../../../data/users";
 
 export const authRouter = new Router({
     prefix: '/auth'
