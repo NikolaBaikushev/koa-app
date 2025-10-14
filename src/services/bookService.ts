@@ -1,6 +1,9 @@
 import { Context } from "koa";
 import { createErrorResponse, createFailResponse, createSuccessResponse } from "../utils/createResponse";
 import { data } from "../../data/users";
+import { getContextStateData } from "../utils/getContextStateData";
+import { CreateBookPayload } from "../schemas/bookSchemas";
+import { generateId } from "../utils/generateId";
 
 export const getAllBooks = (ctx:Context) => {
     const books = data.users.flatMap(u => u.books);
@@ -26,4 +29,18 @@ export const getBookById = (ctx: Context) => {
     }
     ctx.status = 200;
     ctx.body = createSuccessResponse(ctx.status, "", book);
+}
+
+export const createBookForCurrentUser = (ctx: Context) => {
+    const user = ctx.state.user;
+    const body = getContextStateData<CreateBookPayload>(ctx);
+
+    const newBook = {
+        id: generateId(),
+        ...body
+    }
+    
+    user.books = [...user.books, newBook];
+    ctx.status = 201;
+    ctx.body = createSuccessResponse(ctx.status, 'Successfully created book!', newBook);
 }
