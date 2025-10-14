@@ -1,27 +1,27 @@
-import { Context, Next, ParameterizedContext } from 'koa';
+import { Context } from 'koa';
 import { data } from '../../data/users';
-import { LoginUserPayload, RegisterUserPayload, RegisterUserSchema } from '../schemas/authSchemas';
-import z, { ZodSchema } from 'zod';
-import { createErrorResponse, createFailResponse, createSuccessResponse } from '../utils/createResponse';
+import { LoginUserPayload, RegisterUserPayload } from '../schemas/authSchemas';
+import { createFailResponse, createSuccessResponse } from '../utils/createResponse';
 import { getContextStateData } from '../utils/getContextStateData';
 import { createToken } from '../utils/createToken';
 
 
 export const loginUser = (ctx: Context) => {
-    const { username, password } = ctx.request.body;
+    const { username, password } = getContextStateData<LoginUserPayload>(ctx);
 
     const user = data.users.find(u => u.username === username && u.password === password);
 
     if (!user) {
         ctx.status = 401;
-        ctx.body = { message: 'Invalid username or password' };
+        ctx.body = createFailResponse(ctx.status, 'Invalid username or password');
         return;
     }
 
     const payload = { id: user.id, username: user.username };
     const token = createToken(payload);
 
-    ctx.body = { accessToken: token };
+    ctx.status = 200;
+    ctx.body = createSuccessResponse(ctx.status, 'Successfully logged in user!', { accessToken: token });
 };
 
 
@@ -52,7 +52,7 @@ export const registerUser = (ctx: Context) => {
     ctx.status = 200;
 
     const createdUserData = { user: { id: user.id, username: user.username } };
-    
+
     ctx.body = createSuccessResponse(ctx.status, 'User successfully created!', createdUserData);
 
 };
