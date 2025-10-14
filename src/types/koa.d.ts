@@ -1,9 +1,9 @@
-import { Context } from "vm";
+import { Context } from 'vm';
 
 export interface ContextState {
     data?: unknown
 }
-declare module "koa" {
+declare module 'koa' {
   interface DefaultState extends ContextState {
   }
 }

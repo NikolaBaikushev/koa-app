@@ -1,5 +1,5 @@
-import Router from "@koa/router";
-import {authRouter} from "./auth/authRouter";
+import Router from '@koa/router';
+import {authRouter} from './auth/authRouter';
 
 // Main router;
 export const router = new Router({

@@ -26,5 +26,5 @@ export const data: { users: User[] } = {
             password: 'test'
         }
     ] as User[]
-}
+};
 

@@ -1,6 +1,6 @@
 
 
-import { config } from "../../config";
+import { config } from '../../config';
 import jwt from 'jsonwebtoken';
 
 type CreateTokenPayload = {
@@ -9,5 +9,5 @@ type CreateTokenPayload = {
 }
 
 export function createToken(payload: CreateTokenPayload) {
-    return jwt.sign(payload, config.SECRET, { expiresIn: '1h' })
+    return jwt.sign(payload, config.SECRET, { expiresIn: '1h' });
 }

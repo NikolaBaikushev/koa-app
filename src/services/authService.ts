@@ -1,10 +1,10 @@
-import { Context, Next, ParameterizedContext } from "koa";
-import { data } from "../../data/users";
-import { LoginUserPayload, RegisterUserPayload, RegisterUserSchema } from "../schemas/authSchemas";
-import z, { ZodSchema } from "zod";
-import { createErrorResponse, createFailResponse, createSuccessResponse } from "../utils/createResponse";
-import { getContextStateData } from "../utils/getContextStateData";
-import { createToken } from "../utils/createToken";
+import { Context, Next, ParameterizedContext } from 'koa';
+import { data } from '../../data/users';
+import { LoginUserPayload, RegisterUserPayload, RegisterUserSchema } from '../schemas/authSchemas';
+import z, { ZodSchema } from 'zod';
+import { createErrorResponse, createFailResponse, createSuccessResponse } from '../utils/createResponse';
+import { getContextStateData } from '../utils/getContextStateData';
+import { createToken } from '../utils/createToken';
 
 
 export const loginUser = (ctx: Context) => {
@@ -22,7 +22,7 @@ export const loginUser = (ctx: Context) => {
     const token = createToken(payload);
 
     ctx.body = { accessToken: token };
-}
+};
 
 
 export const registerUser = (ctx: Context) => {
@@ -30,14 +30,14 @@ export const registerUser = (ctx: Context) => {
 
     if (password !== confirmPassword) {
         ctx.status = 400;
-        ctx.body = createFailResponse(ctx.status, 'Paswords don\'t match')
+        ctx.body = createFailResponse(ctx.status, 'Paswords don\'t match');
         return;
     }
 
     const existingUser = data.users.find((u) => u.username === username);
     if (existingUser) {
         ctx.status = 409;
-        ctx.body = createFailResponse(ctx.status, "Username already exists!")
+        ctx.body = createFailResponse(ctx.status, 'Username already exists!');
         return;
     }
 
@@ -45,14 +45,14 @@ export const registerUser = (ctx: Context) => {
         id: Date.now() + Math.floor(Math.random() * 1000),
         username,
         password
-    }
+    };
 
     data.users.push(user);
 
     ctx.status = 200;
 
-    const createdUserData = { user: { id: user.id, username: user.username } }
+    const createdUserData = { user: { id: user.id, username: user.username } };
     
-    ctx.body = createSuccessResponse(ctx.status, "User successfully created!", createdUserData);
+    ctx.body = createSuccessResponse(ctx.status, 'User successfully created!', createdUserData);
 
-}
+};
