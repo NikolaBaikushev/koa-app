@@ -1,10 +1,9 @@
-import { Context } from "koa";
-import { createErrorResponse, createFailResponse, createSuccessResponse } from "../utils/createResponse";
-import { Book, data } from "../../data/users";
-import { getContextStateData } from "../utils/getContextStateData";
-import { CreateBookPayload, UpdateBookPayload } from "../schemas/bookSchemas";
-import { generateId } from "../utils/generateId";
-import { id } from "zod/v4/locales";
+import { Context } from 'koa';
+import { createFailResponse, createSuccessResponse } from '../utils/createResponse';
+import { Book, data } from '../../data/users';
+import { getContextStateData } from '../utils/getContextStateData';
+import { CreateBookPayload, UpdateBookPayload } from '../schemas/bookSchemas';
+import { generateId } from '../utils/generateId';
 
 // export const getAllBooks = (ctx:Context) => {
 //     const books = data.users.flatMap(u => u.books);
@@ -15,8 +14,8 @@ import { id } from "zod/v4/locales";
 export const getAllUserBooks = (ctx: Context) => {
     const user = ctx.state.user;
     ctx.status = 200;
-    ctx.body = createSuccessResponse(ctx.status, 'Get books', user!.books)
-}
+    ctx.body = createSuccessResponse(ctx.status, 'Get books', user!.books);
+};
 
 export const getBookById = (ctx: Context) => {
     const { id } = ctx.params;
@@ -25,13 +24,13 @@ export const getBookById = (ctx: Context) => {
 
     if (!book) {
         ctx.status = 400;
-        ctx.body = createFailResponse(ctx.status, `Book Not Found! ID: ${id}`)
+        ctx.body = createFailResponse(ctx.status, `Book Not Found! ID: ${id}`);
         return;
     }
 
     ctx.status = 200;
-    ctx.body = createSuccessResponse(ctx.status, "", book);
-}
+    ctx.body = createSuccessResponse(ctx.status, '', book);
+};
 
 export const createBook = (ctx: Context) => {
     const user = ctx.state.user;
@@ -40,22 +39,22 @@ export const createBook = (ctx: Context) => {
     const newBook = {
         id: generateId(),
         ...body
-    }
+    };
 
     user.books.push(newBook); // Mutable
     // user.books = [...user.books, newBook]; // Immutable
     ctx.status = 201;
     ctx.body = createSuccessResponse(ctx.status, 'Successfully created book!', newBook);
-}
+};
 
 export const updateBook = (ctx: Context) => {
     const { id } = ctx.params;
 
     const user = ctx.state.user;
-    let book = user.books.find((b: Book) => b.id === Number(id));
+    const book = user.books.find((b: Book) => b.id === Number(id));
     if (!book) {
         ctx.status = 400;
-        ctx.body = createFailResponse(ctx.status, `Book doesn\'t exist or it is not owned by current user! Book ID: ${id}`)
+        ctx.body = createFailResponse(ctx.status, `Book doesn't exist or it is not owned by current user! Book ID: ${id}`);
         return;
     }
 
@@ -65,11 +64,11 @@ export const updateBook = (ctx: Context) => {
     // user.books = user.books.map((b: Book)=>
     //     b.id === book.id ? updatedBook : b
     // ); // Immutable
-    Object.assign(book,body) // Mutable
+    Object.assign(book,body); // Mutable
 
     ctx.status = 200;
-    ctx.body = createSuccessResponse(ctx.status, 'Successfully updated!', book)
-}
+    ctx.body = createSuccessResponse(ctx.status, 'Successfully updated!', book);
+};
 
 export const deleteBook = (ctx: Context) => {
     const {id} = ctx.params;
@@ -78,7 +77,7 @@ export const deleteBook = (ctx: Context) => {
 
     if (!book) {
         ctx.status = 400;
-        ctx.body = createFailResponse(ctx.status, `Book doesn\'t exist or it is not owned by current user! Book ID: ${id}`)
+        ctx.body = createFailResponse(ctx.status, `Book doesn't exist or it is not owned by current user! Book ID: ${id}`);
         return;
     }
 
@@ -90,8 +89,8 @@ export const deleteBook = (ctx: Context) => {
 
     ctx.status = 200;
     ctx.body = createSuccessResponse(ctx.status, 'Successfully deleted book!', book);
-}
+};
 
 export function getMutableUser(id: number){
-return data.users.find(user => user.id === id);
+    return data.users.find(user => user.id === id);
 }

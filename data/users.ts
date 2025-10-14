@@ -21,17 +21,17 @@ export const data: { users: User[] } = {
                 {
                     id: 1,
                     author: 'Pesho',
-                    title: "Hronikite na Pesho"
+                    title: 'Hronikite na Pesho'
                 },
                 {
                     id: 2,
                     author: 'Misho',
-                    title: "Hronikite na Misho"
+                    title: 'Hronikite na Misho'
                 },
                 {
                     id: 3,
                     author: 'Tosho',
-                    title: "Hronikite na Tosho"
+                    title: 'Hronikite na Tosho'
                 },
             ]
         },

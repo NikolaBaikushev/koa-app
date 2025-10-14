@@ -10,8 +10,8 @@ export const booksRouter = new Router({
 
 // booksRouter.get('/', authMiddleware, getAllBooks);
 
-booksRouter.get('/:id', authMiddleware, getBookById)
-booksRouter.get('/', authMiddleware, getAllUserBooks)
+booksRouter.get('/:id', authMiddleware, getBookById);
+booksRouter.get('/', authMiddleware, getAllUserBooks);
 booksRouter.post('/', authMiddleware, validateBody(CreateBookSchema), createBook);
 booksRouter.put('/:id', authMiddleware, validateBody(UpdateBookSchema), updateBook);
 booksRouter.delete('/:id', authMiddleware, deleteBook);

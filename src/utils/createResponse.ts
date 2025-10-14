@@ -3,7 +3,7 @@ type ErrorResponse = {
     success: false;
     status: number;
     message: string;
-    errors: any; 
+    errors: unknown; 
     data?: never;
 };
 
@@ -24,7 +24,7 @@ type SuccessResponse<T> = {
 };
 
 
-export function createErrorResponse(status: number, message: string, errors: any): ErrorResponse {
+export function createErrorResponse(status: number, message: string, errors: unknown): ErrorResponse {
     return { success: false, status, message, errors };
 }
 
