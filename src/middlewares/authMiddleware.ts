@@ -15,7 +15,14 @@ export const authMiddleware = async (ctx: Context, next: Next) => {
                 ctx.body = { error: 'Unauthorized: Invalid or missing user' };
                 return resolve();
             }
-            ctx.state.user = {id: user.id, username: user.username}; // TODO: Change this from the signing payload on the jwt
+
+            // TODO: Change this from the signing payload on the jwt
+            ctx.state.user = {
+                id: user.id,
+                username: user.username,
+                books: user.books
+            };
+             
             resolve(next());
         })(ctx, next);
     });

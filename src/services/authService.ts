@@ -20,7 +20,7 @@ export const loginUser = (ctx: Context) => {
     const payload = { id: user.id, username: user.username };
     const token = createToken(payload);
 
-    ctx.status = 200;
+    ctx.status = 201;
     ctx.body = createSuccessResponse(ctx.status, 'Successfully logged in user!', { accessToken: token });
 };
 
@@ -44,12 +44,13 @@ export const registerUser = (ctx: Context) => {
     const user = {
         id: Date.now() + Math.floor(Math.random() * 1000),
         username,
-        password
+        password,
+        books: []
     };
 
     data.users.push(user);
 
-    ctx.status = 200;
+    ctx.status = 201;
 
     const createdUserData = { user: { id: user.id, username: user.username } };
 
