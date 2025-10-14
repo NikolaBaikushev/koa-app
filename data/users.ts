@@ -50,7 +50,11 @@ export const data: { users: User[] } = {
             id:4,
             username: 'test',
             password: 'test',
-            books: []
+            books: [{
+                id: 4,
+                author: 'Sony',
+                title: 'Sony Electronics'
+            }]
         }
     ] as User[]
 };
