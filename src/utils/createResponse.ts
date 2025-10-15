@@ -33,5 +33,6 @@ export function createFailResponse(status: number, message: string): FailRespons
 }
 
 export function createSuccessResponse<T>(status: number, message: string, data: T): SuccessResponse<T> {
+    
     return { success: true, status, message, data };
 }

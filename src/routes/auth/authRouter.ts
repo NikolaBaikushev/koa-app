@@ -1,6 +1,6 @@
 import Router from '@koa/router';
 import { data } from '../../../data/users';
-import { loginUser, registerUser } from '../../services/authService';
+import { loginUser, loginUserController, registerUser } from '../../services/authService';
 import { authMiddleware } from '../../middlewares/authMiddleware';
 import { validateBody } from '../../middlewares/validationMiddleware';
 import { LoginUserSchema, RegisterUserSchema } from '../../schemas/authSchemas';
@@ -13,5 +13,5 @@ authRouter.get('/users', authMiddleware, (ctx) => {
     ctx.body = data;
 });
 
-authRouter.post('/login', validateBody(LoginUserSchema), loginUser);
+authRouter.post('/login', validateBody(LoginUserSchema), loginUserController);
 authRouter.post('/register', validateBody(RegisterUserSchema), registerUser);

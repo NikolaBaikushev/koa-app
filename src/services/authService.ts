@@ -1,29 +1,48 @@
 import { Context } from 'koa';
 import { data } from '../../data/users';
 import { LoginUserPayload, RegisterUserPayload } from '../schemas/authSchemas';
-import { createFailResponse, createSuccessResponse } from '../utils/createResponse';
+import { createErrorResponse, createFailResponse, createSuccessResponse } from '../utils/createResponse';
 import { getContextStateData } from '../utils/getContextStateData';
 import { createToken } from '../utils/createToken';
+import { isHttpError } from '../types/guards/isHttpError';
+import { formatUnknownError } from '../utils/formatUnknownError';
 
+export class HttpError extends Error {
+  status: number;
 
-export const loginUser = (ctx: Context) => {
-    const { username, password } = getContextStateData<LoginUserPayload>(ctx);
+  constructor(status: number, message: string) {
+    super(message);
+    this.status = status;
+    Object.setPrototypeOf(this, HttpError.prototype);
+  }
+}
 
-    const user = data.users.find(u => u.username === username && u.password === password);
+export const loginUser = (payload: LoginUserPayload) => {
+    const user = data.users.find(u => u.username === payload.username && u.password === payload.password);
 
     if (!user) {
-        ctx.status = 401;
-        ctx.body = createFailResponse(ctx.status, 'Invalid username or password');
-        return;
+        throw new HttpError(401, 'Invalid username or password');
     }
-
-    const payload = { id: user.id, username: user.username };
-    const token = createToken(payload);
-
-    ctx.status = 201;
-    ctx.body = createSuccessResponse(ctx.status, 'Successfully logged in user!', { accessToken: token });
+    
+    return createToken({ id: user.id, username: user.username });
 };
 
+export const loginUserController = (ctx:Context) => {
+    try {
+        const payload = getContextStateData<LoginUserPayload>(ctx);
+        const token = loginUser(payload);
+        ctx.status = 201;
+        ctx.body = createSuccessResponse(ctx.status, 'Successfully logged in!', { accessToken: token })
+    } catch(err) {
+        if (isHttpError(err)) {
+            ctx.status = err.status;
+            ctx.body = createFailResponse(ctx.status, err.message);
+            return;
+        }
+        ctx.status = 500;
+        ctx.body = createErrorResponse(ctx.status, 'Something went wrong!', formatUnknownError(err))
+    }
+}
 
 export const registerUser = (ctx: Context) => {
     const { username, password, confirmPassword } = getContextStateData<RegisterUserPayload>(ctx);

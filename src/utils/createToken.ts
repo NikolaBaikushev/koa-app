@@ -1,7 +1,7 @@
 
 
 import { config } from '../../config';
-import jwt from 'jsonwebtoken';
+import jwt, { JsonWebTokenError } from 'jsonwebtoken';
 
 type CreateTokenPayload = {
     id: number,
@@ -9,5 +9,6 @@ type CreateTokenPayload = {
 }
 
 export function createToken(payload: CreateTokenPayload) {
+    throw new Error('asd')
     return jwt.sign(payload, config.SECRET, { expiresIn: '1h' });
 }
