@@ -1,6 +1,6 @@
-import { HttpError } from "../../services/authService";
+import { CustomHttpError } from "../../common/HttpError";
 
-export const isHttpError = (err: unknown): err is HttpError => {
+export const isHttpError = (err: unknown): err is CustomHttpError => {
   return (
     typeof err === 'object' &&
     err !== null &&
