@@ -2,9 +2,14 @@ import { Book, data, User } from '../../data/users';
 import { CreateBookPayload, UpdateBookPayload } from '../schemas/bookSchemas';
 import { generateId } from '../utils/generateId';
 import { CustomHttpError } from '../common/HttpError';
+import { BookRepository } from '../repository/BookRepository';
+import { db } from '../config/knex';
+import { BookEntity } from '../schemas/models/bookEntitySchema';
 
-export const getAllBooks = (): Book[] => {
-    return data.users.flatMap(u => u.books);
+const repository = new BookRepository(db);
+
+export const getAllBooks = (): Promise<BookEntity[]> => {
+    return repository.getAll()
 }
 
 export const getBookById = (bookId: number, user: Omit<User, 'password'>) => {

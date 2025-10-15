@@ -4,8 +4,8 @@ import { createBook, deleteBook, getAllBooks, getBookById, updateBook } from "..
 import { CreateBookPayload, UpdateBookPayload } from "../../schemas/bookSchemas";
 import { getContextStateData } from "../../utils/getContextStateData";
 
-export const getAllBooksController = (ctx: Context) => {
-    const books = getAllBooks();
+export const getAllBooksController = async (ctx: Context) => {
+    const books = await getAllBooks();
     ctx.status = 201;
     ctx.body = createSuccessResponse(ctx.status, '', books)
 }

@@ -2,14 +2,15 @@ import Router from '@koa/router';
 import { authMiddleware } from '../../middlewares/authMiddleware';
 import { CreateBookSchema, UpdateBookSchema } from '../../schemas/bookSchemas';
 import { validateBody } from '../../middlewares/validationMiddleware';
-import { createBookController, deleteBookController, getAllUserBooksController, getBookByIdController, updateBookController } from '../../controllers/books/booksController';
+import { createBookController, deleteBookController, getAllBooksController, getAllUserBooksController, getBookByIdController, updateBookController } from '../../controllers/books/booksController';
 import { errorControllerWrapper } from '../../utils/errorHandlerWrapper';
+import { getAllBooks } from '../../services/bookService';
 
 export const booksRouter = new Router({
     prefix: '/books',
 });
 
-// booksRouter.get('/', authMiddleware, getAllBooksController);
+booksRouter.get('/all', authMiddleware, getAllBooksController);
 
 booksRouter.get('/:id', authMiddleware, errorControllerWrapper(getBookByIdController));
 booksRouter.get('/', authMiddleware, errorControllerWrapper(getAllUserBooksController));

@@ -10,6 +10,7 @@ interface Writer<T> {
 interface Reader<T> {
     find(item: Partial<T>): Promise<T[]>
     findOne(id: string | number): Promise<T>
+    getAll(): Promise<T[]>
 }
 
 type BaseRepository<T> = Writer<T> & Reader<T>
@@ -32,6 +33,10 @@ export abstract class KnexRepository<T> implements BaseRepository<T> {
 
     find(item: Partial<T>): Promise<T[]> {
         throw new Error("Not implemented")
+    }
+
+    getAll() {
+        return this.qb.select('*').from(this.tableName);
     }
 
     create(data: Omit<T, 'id'>): Promise<T> {
