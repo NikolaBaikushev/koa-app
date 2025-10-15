@@ -1,9 +1,23 @@
 
 import dotenv from 'dotenv';
+import z from 'zod';
 
 dotenv.config();
 
-export const config = {
-    PORT: process.env.PORT || 3000,
-    SECRET: process.env.SECRET || 'asdsadmaskdma12321k3m12k3maskf13k4n123kn4'
+const configSchema = z.object({
+    PORT: z.string().min(4, '.env Varaiable PORT is required and must have atleast 4 digits'),
+    SECRET: z.string().min(1, ".env variable SECRET is required!")
+})
+
+type ConfigData = z.infer<typeof configSchema>;
+
+const parsedData = configSchema.safeParse(process.env);
+if (!parsedData.success) {
+    console.error('.env file has errors', z.flattenError(parsedData.error))
+    process.exit(1);
+}
+
+export const config: ConfigData = {
+    PORT: parsedData.data.PORT,
+    SECRET: parsedData.data.SECRET,
 };
