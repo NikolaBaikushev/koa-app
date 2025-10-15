@@ -1,94 +1,61 @@
-import { Context } from 'koa';
-import { createFailResponse, createSuccessResponse } from '../utils/createResponse';
-import { Book, data } from '../../data/users';
-import { getContextStateData } from '../utils/getContextStateData';
+import { Book, data, User } from '../../data/users';
 import { CreateBookPayload, UpdateBookPayload } from '../schemas/bookSchemas';
 import { generateId } from '../utils/generateId';
+import { CustomHttpError } from '../common/HttpError';
 
-// export const getAllBooks = (ctx:Context) => {
-//     const books = data.users.flatMap(u => u.books);
-//     ctx.status = 200;
-//     ctx.body = createSuccessResponse(ctx.status, '', books);
-// }
+export const getAllBooks = (): Book[] => {
+    return data.users.flatMap(u => u.books);
+}
 
-export const getAllUserBooks = (ctx: Context) => {
-    const user = ctx.state.user;
-    ctx.status = 200;
-    ctx.body = createSuccessResponse(ctx.status, 'Get books', user!.books);
-};
-
-export const getBookById = (ctx: Context) => {
-    const { id } = ctx.params;
-    const user = ctx.state.user;
-    const book = user.books.find((b: Book) => b.id === Number(id));
+export const getBookById = (bookId: number, user: Omit<User, 'password'>) => {
+    const book = user.books.find((b: Book) => b.id === bookId);
 
     if (!book) {
-        ctx.status = 400;
-        ctx.body = createFailResponse(ctx.status, `Book Not Found! ID: ${id}`);
-        return;
+        throw new CustomHttpError(404,`Book doesn't exist or it is not owned by current user! Book ID: ${bookId}`);
     }
 
-    ctx.status = 200;
-    ctx.body = createSuccessResponse(ctx.status, '', book);
+    return book
 };
 
-export const createBook = (ctx: Context) => {
-    const user = ctx.state.user;
-    const body = getContextStateData<CreateBookPayload>(ctx);
-
+export const createBook = (payload: CreateBookPayload, user: Omit<User, 'password'>) => {
     const newBook = {
         id: generateId(),
-        ...body
+        ...payload
     };
 
     user.books.push(newBook); // Mutable
     // user.books = [...user.books, newBook]; // Immutable
-    ctx.status = 201;
-    ctx.body = createSuccessResponse(ctx.status, 'Successfully created book!', newBook);
+    return newBook;
 };
 
-export const updateBook = (ctx: Context) => {
-    const { id } = ctx.params;
-
-    const user = ctx.state.user;
-    const book = user.books.find((b: Book) => b.id === Number(id));
+export const updateBook = (bookId: number, payload: UpdateBookPayload, user: Omit<User,'password'>) => {
+    const book = user.books.find((b: Book) => b.id === bookId);
     if (!book) {
-        ctx.status = 400;
-        ctx.body = createFailResponse(ctx.status, `Book doesn't exist or it is not owned by current user! Book ID: ${id}`);
-        return;
+        throw new CustomHttpError(404, `Book doesn't exist or it is not owned by current user! Book ID: ${bookId}`)
     }
-
-    const body = getContextStateData<UpdateBookPayload>(ctx);
 
     // const updatedBook = Object.assign({}, book, body);
     // user.books = user.books.map((b: Book)=>
     //     b.id === book.id ? updatedBook : b
     // ); // Immutable
-    Object.assign(book,body); // Mutable
-
-    ctx.status = 200;
-    ctx.body = createSuccessResponse(ctx.status, 'Successfully updated!', book);
+    Object.assign(book,payload); // Mutable
+    return book;
 };
 
-export const deleteBook = (ctx: Context) => {
-    const {id} = ctx.params;
-    const user = ctx.state.user;
-    const book = user.books.find((b:Book) => b.id === Number(id));
+export const deleteBook = (bookId: number, user: Omit<User, 'password'>) => {
+    const book = user.books.find((b:Book) => b.id === bookId);
 
     if (!book) {
-        ctx.status = 400;
-        ctx.body = createFailResponse(ctx.status, `Book doesn't exist or it is not owned by current user! Book ID: ${id}`);
-        return;
+        throw new CustomHttpError(404, `Book doesn't exist or it is not owned by current user! Book ID: ${bookId}`)
     }
 
-    user.books = user.books.filter((b: Book) => b.id !== Number(id));
+    user.books = user.books.filter((b: Book) => b.id !== bookId);
 
     // NOTE: This is used to check the mutable data ... 
     const mutableUser = getMutableUser(user.id);
     mutableUser!.books = user.books;
 
-    ctx.status = 200;
-    ctx.body = createSuccessResponse(ctx.status, 'Successfully deleted book!', book);
+    return book;
 };
 
 export function getMutableUser(id: number){
