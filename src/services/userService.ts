@@ -1,9 +1,8 @@
-import { UserRepository } from '../repository/UserRepository';
-import { db } from '../config/knex';
 import { CustomHttpError } from '../common/HttpError';
 import { User } from '../schemas/models/userEntitySchema';
+import { RepositoryManager } from '../repository/RepositoryManager';
 
-const repository = new UserRepository(db);
+const repository = RepositoryManager.UsersRepository;
 
 const getUserById = async (id: number): Promise<User> => {
     const user = await repository.findById(id, ['id', 'username']);
@@ -12,6 +11,9 @@ const getUserById = async (id: number): Promise<User> => {
     }
     return user;
 };
+
+const addBookToUser = async (bookId: number, userId: number) => {
+}
 
 export const userService = {
     getUserById,

@@ -1,11 +1,10 @@
 import { LoginUserPayload, RegisterUserPayload } from '../schemas/authSchemas';
 import { createToken, JwtTokenPayload } from '../utils/createToken';
 import { CustomHttpError } from '../common/HttpError';
-import { UserRepository } from '../repository/UserRepository';
-import { db } from '../config/knex';
 import { User, UserEntity } from '../schemas/models/userEntitySchema';
+import { RepositoryManager } from '../repository/RepositoryManager';
 
-const repository = new UserRepository(db);
+const repository = RepositoryManager.UsersRepository;
 
 const loginUser = async (payload: LoginUserPayload): Promise<string> => {
     const user = await repository.findOneBy({ username: payload.username, password: payload.password });

@@ -1,10 +1,9 @@
 import { CustomHttpError } from '../common/HttpError';
-import { BookRepository } from '../repository/BookRepository';
-import { db } from '../config/knex';
 import { BookEntity } from '../schemas/models/bookEntitySchema';
 import { CreateBookPayload, UpdateBookPayload } from '../schemas/bookSchemas';
+import { RepositoryManager } from '../repository/RepositoryManager';
 
-const repository = new BookRepository(db);
+const repository = RepositoryManager.BooksRepository;
 
 const getAllBooks = (): Promise<BookEntity[]> => {
     return repository.getAll();
