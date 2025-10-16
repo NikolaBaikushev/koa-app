@@ -1,7 +1,7 @@
-import { db } from "../config/knex";
-import { BookRepository } from "./BookRepository";
-import { UserBookRepository } from "./UserBookRepository";
-import { UserRepository } from "./UserRepository";
+import { db } from '../config/knex';
+import { BookRepository } from './BookRepository';
+import { UserBookRepository } from './UserBookRepository';
+import { UserRepository } from './UserRepository';
 
 export class RepositoryManager {
     static readonly BooksRepository = BookRepository.getInstance(db);

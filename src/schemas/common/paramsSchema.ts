@@ -9,5 +9,5 @@ export const createParamSchema = (...paramsName: string[]) => {
     for (const name of paramsName) {
         shape[name] = z.coerce.number().int().positive(); // currently works only for ids because 
     }
-    return z.object(shape)
-}
+    return z.object(shape);
+};

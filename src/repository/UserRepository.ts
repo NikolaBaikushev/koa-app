@@ -1,6 +1,6 @@
-import { Knex } from "knex";
-import { UserEntity } from "../schemas/models/userEntitySchema";
-import { KnexRepository } from "./Repository";
+import { Knex } from 'knex';
+import { UserEntity } from '../schemas/models/userEntitySchema';
+import { KnexRepository } from './Repository';
 
 export class UserRepository extends KnexRepository<UserEntity> {
     protected tableName: string = 'users';
@@ -9,7 +9,7 @@ export class UserRepository extends KnexRepository<UserEntity> {
 
     private constructor(knex: Knex) {
         if (UserRepository.#instance) {
-            throw new Error("UserRepository is singleton!");
+            throw new Error('UserRepository is singleton!');
         }
         super(knex);
     }

@@ -10,7 +10,7 @@ export const authRouter = new Router({
 });
 
 authRouter.get('/users', authMiddleware, (ctx) => {
-    ctx.body = []
+    ctx.body = [];
 });
 authRouter.post('/login', validateBody(LoginUserSchema), errorControllerWrapper(authController.loginUser));
 authRouter.post('/register', validateBody(RegisterUserSchema), errorControllerWrapper(authController.registerUser));

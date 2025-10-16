@@ -9,7 +9,7 @@ export class BookRepository extends KnexRepository<BookEntity> {
 
     private constructor(knex: Knex) {
         if (BookRepository.#instance) {
-            throw new Error("BookRepository is singleton!");
+            throw new Error('BookRepository is singleton!');
         }
         super(knex);
     }
