@@ -12,9 +12,9 @@ export const loginUserController = (ctx: Context) => {
     ctx.body = createSuccessResponse(ctx.status, 'Successfully logged in!', { accessToken: token })
 }
 
-export const registerUserController = (ctx: Context) => {
+export const registerUserController = async (ctx: Context) => {
     const payload = getContextStateData<RegisterUserPayload>(ctx);
-    const user = registerUser(payload);
+    const user = await registerUser(payload);
     ctx.status = 201;
     ctx.body = createSuccessResponse(ctx.status, 'Successfully registered!', user);
 };

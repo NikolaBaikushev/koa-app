@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const userEntitySchema = z.object({
-    id: z.number().int().nonnegative().optional(),
+    id: z.number().int().nonnegative(),
     username: z.string().min(1),
     password: z.string().min(1),
 });

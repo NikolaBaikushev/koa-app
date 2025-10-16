@@ -6,6 +6,11 @@ import { getContextStateData } from '../utils/getContextStateData';
 import { createToken } from '../utils/createToken';
 import { CustomHttpError } from '../common/HttpError';
 import { isHttpError } from '../types/guards/isHttpError';
+import { UserRepository } from '../repository/UserRepository';
+import { db, knexSetup } from '../config/knex';
+import { UserEntity } from '../schemas/models/userEntitySchema';
+
+const repository = new UserRepository(db);
 
 export const loginUser = (payload: LoginUserPayload) => {
     const user = data.users.find(u => u.username === payload.username && u.password === payload.password);
@@ -17,25 +22,27 @@ export const loginUser = (payload: LoginUserPayload) => {
     return createToken({ id: user.id, username: user.username });
 };
 
-export const registerUser = (payload: RegisterUserPayload) => {
+export const registerUser = async (payload: RegisterUserPayload) => {
     const { username, password, confirmPassword} = payload;
 
     if (password !== confirmPassword) {
         throw new CustomHttpError(400, 'Passwords don\'t match!');
     }
 
-    const user = data.users.find((u => u.username === username));
+    // const user = data.users.find((u => u.username === username));
+    const user = await repository.findOneBy({username});
     if (user) {
         throw new CustomHttpError(400, 'User already exists!')
     }
 
-    const newUser = {
-        id: Date.now() + Math.floor(Math.random() * 1000),
+    const newUser: Omit<UserEntity, 'id'> = {
         username,
         password,
-        books: []
     };
 
-    data.users.push(newUser);
-    return newUser;
+    const result = await repository.create(newUser);
+
+
+    // data.users.push(newUser);
+    return result;
 }
