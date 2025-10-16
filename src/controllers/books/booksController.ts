@@ -3,6 +3,8 @@ import { createSuccessResponse } from '../../utils/createResponse';
 import { bookService } from '../../services/bookService';
 import { validateParams } from '../../validators/validateParams';
 import { ParamsSchema } from '../../schemas/common/paramsSchema';
+import { getContextStateData } from '../../utils/getContextStateData';
+import { CreateBookPayload, UpdateBookPayload } from '../../schemas/bookSchemas';
 
 
 const getAllBooks = async (ctx: Context) => {
@@ -24,33 +26,33 @@ const getBookById = async (ctx: Context) => {
     ctx.body = createSuccessResponse(ctx.status, '', book);
 };
 
-// const createBook = (ctx: Context) => {
-//     const payload = getContextStateData<CreateBookPayload>(ctx);
-//     const book = bookService.createBook(payload, ctx.state.user)
-//     ctx.status = 200;
-//     ctx.body = createSuccessResponse(ctx.status, 'Successfully created book!', book);
-// }
+const createBook = async (ctx: Context) => {
+    const payload = getContextStateData<CreateBookPayload>(ctx);
+    const book = await bookService.createBook(payload);
+    ctx.status = 200;
+    ctx.body = createSuccessResponse(ctx.status, 'Successfully created book!', book);
+}
 
-// const updateBook = async (ctx: Context) => {
-//     const { id } = validateParams(ctx, ParamsSchema);
-//     const payload = getContextStateData<UpdateBookPayload>(ctx);
-//     const book = await bookService.updateBook(id, payload);
-//     ctx.status = 200;
-//     ctx.body = createSuccessResponse(ctx.status, 'Successfully updated!', book);
-// }
+const updateBook = async (ctx: Context) => {
+    const { id } = validateParams(ctx, ParamsSchema);
+    const payload = getContextStateData<UpdateBookPayload>(ctx);
+    const book = await bookService.updateBook(id, payload);
+    ctx.status = 200;
+    ctx.body = createSuccessResponse(ctx.status, 'Successfully updated book!', book);
+}
 
-// const deleteBook = (ctx: Context) => {
-//     const { id } = ctx.params;
-//     const book = bookService.deleteBook(Number(id), ctx.state.user)
-//     ctx.status = 200;
-//     ctx.body = createSuccessResponse(ctx.status, 'Successfully deleted book!', book);
-// }
+const deleteBook = async (ctx: Context) => {
+    const { id } = validateParams(ctx, ParamsSchema);
+    const book = await bookService.deleteBook(id);
+    ctx.status = 200;
+    ctx.body = createSuccessResponse(ctx.status, 'Successfully deleted book!', book);
+}
 
 export const bookController = {
     getAllBooks,
     getCurrentUserBooks,
-    // createBook,
-    // updateBook,
-    // deleteBook,
+    createBook,
+    updateBook,
+    deleteBook,
     getBookById,
 };

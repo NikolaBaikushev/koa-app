@@ -3,8 +3,8 @@ import { Knex } from 'knex';
 
 interface Writer<T> {
     create(item: CreateEntity<T>, returning: ReturnColumns<T>): Promise<T>
-    update(id: string, item: Partial<T>): Promise<boolean>
-    delete(id: string): Promise<boolean>
+    update(id: string, item: Partial<T>, returning: ReturnColumns<T>): Promise<T>
+    delete(id: string, returning: ReturnColumns<T>): Promise<T>
 }
 
 interface Reader<T> {
@@ -33,12 +33,15 @@ export abstract class KnexRepository<T> implements BaseRepository<T> {
         return this.knex(this.tableName);
     }
 
-    update(id: string, item: Partial<T>): Promise<boolean> {
-        throw new Error('Not implemented');
+    async update(id: string | number, item: Partial<T>, returning: ReturnColumns<T> = '*'): Promise<T> {
+        return this.qb.where({ id: id }).update({
+            ...item,
+            updated_at: new Date(),
+        }).returning(returning).then(rows => rows[0]);
     }
 
-    delete(id: string): Promise<boolean> {
-        throw new Error('Not implemented');
+    async delete(id: string | number, returning: ReturnColumns<T> = '*'): Promise<T> {
+        return this.qb.where({ id: id }).delete().returning(returning).then(rows => rows[0]);
     }
 
     find(item: Partial<T>): Promise<T[]> {
@@ -49,7 +52,7 @@ export abstract class KnexRepository<T> implements BaseRepository<T> {
         return this.qb.select('*').from(this.tableName);
     }
 
-    create(data: CreateEntity<T>, returning: ReturnColumns<T> = '*'
+    async create(data: CreateEntity<T>, returning: ReturnColumns<T> = '*'
     ): Promise<T> {
         return this.qb.insert(data).returning(returning).then(rows => rows[0]);
     }
@@ -62,5 +65,5 @@ export abstract class KnexRepository<T> implements BaseRepository<T> {
     findOneBy(item: Partial<T>, select: SelectColumns<T> = '*'): Promise<T | null> {
         return this.qb.select(select).where(item).first() ?? null;
     }
-    
+
 }
