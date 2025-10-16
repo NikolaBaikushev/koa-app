@@ -29,7 +29,6 @@ export const registerUser = async (payload: RegisterUserPayload) => {
         throw new CustomHttpError(400, 'Passwords don\'t match!');
     }
 
-    // const user = data.users.find((u => u.username === username));
     const user = await repository.findOneBy({username});
     if (user) {
         throw new CustomHttpError(400, 'User already exists!')
@@ -40,9 +39,7 @@ export const registerUser = async (payload: RegisterUserPayload) => {
         password,
     };
 
-    const result = await repository.create(newUser);
+    const result = await repository.create(newUser, ['id', 'username']);
 
-
-    // data.users.push(newUser);
     return result;
 }

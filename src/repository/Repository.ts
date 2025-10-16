@@ -2,7 +2,7 @@
 import { Knex } from "knex";
 
 interface Writer<T> {
-    create(item: Omit<T, 'id'>): Promise<T>
+    create(item: Omit<T, 'id'>, returning: ReturningColumn<T>): Promise<T>
     update(id: string, item: Partial<T>): Promise<boolean>
     delete(id: string): Promise<boolean>
 }
@@ -15,6 +15,11 @@ interface Reader<T> {
 }
 
 type BaseRepository<T> = Writer<T> & Reader<T>
+
+
+
+type StringKeyOf<T> = Extract<keyof T, string>;
+type ReturningColumn<T> = StringKeyOf<T> | Array<StringKeyOf<T>> | '*';
 
 export abstract class KnexRepository<T> implements BaseRepository<T> {
     protected abstract tableName: string;
@@ -40,9 +45,11 @@ export abstract class KnexRepository<T> implements BaseRepository<T> {
         return this.qb.select('*').from(this.tableName);
     }
 
-    create(data: Omit<T, 'id'>): Promise<T> {
-        return this.qb.insert(data).returning('*').then(rows => rows[0]);
+    create(data: Omit<T, 'id'>, returning: ReturningColumn<T> = '*'
+    ): Promise<T> {
+        return this.qb.insert(data).returning(returning).then(rows => rows[0]);
     }
+
 
     findById(id: string | number): Promise<T> {
         return this.qb.select('*').where({ id }).first();
@@ -50,5 +57,5 @@ export abstract class KnexRepository<T> implements BaseRepository<T> {
 
     findOneBy(item: Partial<T>): Promise<T | null> {
         return this.qb.select('*').where(item).first() ?? null;
-    }   
+    }
 }
