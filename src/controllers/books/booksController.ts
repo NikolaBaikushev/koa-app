@@ -1,47 +1,56 @@
 import { Context } from "koa";
 import { createSuccessResponse } from "../../utils/createResponse";
-import { createBook, deleteBook, getAllBooks, getBookById, updateBook } from "../../services/bookService";
+import { bookService } from "../../services/bookService";
 import { CreateBookPayload, UpdateBookPayload } from "../../schemas/bookSchemas";
 import { getContextStateData } from "../../utils/getContextStateData";
 
-export const getAllBooksController = async (ctx: Context) => {
-    const books = await getAllBooks();
+const getAllBooks = async (ctx: Context) => {
+    const books = await bookService.getAllBooks();
     ctx.status = 201;
     ctx.body = createSuccessResponse(ctx.status, '', books)
 }
 
-export const getAllUserBooksController = (ctx: Context) => {
+const getAllUserBooks = (ctx: Context) => {
     const user = ctx.state.user;
     ctx.status = 200;
     ctx.body = createSuccessResponse(ctx.status, 'Get books', user!.books);
 };
 
-export const getBookByIdController = (ctx: Context) => {
+const getBookById = (ctx: Context) => {
     const { id } = ctx.params;
-    const book = getBookById(Number(id), ctx.state.user);
+    const book = bookService.getBookById(Number(id), ctx.state.user);
     ctx.status = 200;
     ctx.body = createSuccessResponse(ctx.status, '', book);
 };
 
-export const createBookController = (ctx: Context) => {
+const createBook = (ctx: Context) => {
     const payload = getContextStateData<CreateBookPayload>(ctx);
-    const book = createBook(payload, ctx.state.user)
+    const book = bookService.createBook(payload, ctx.state.user)
     ctx.status = 200;
     ctx.body = createSuccessResponse(ctx.status, 'Successfully created book!', book);
 }
 
-export const updateBookController = (ctx: Context) => {
+const updateBook = (ctx: Context) => {
     const { id } = ctx.params;
 
     const payload = getContextStateData<UpdateBookPayload>(ctx);
-    const book = updateBook(Number(id), payload, ctx.state.user);
+    const book = bookService.updateBook(Number(id), payload, ctx.state.user);
     ctx.status = 200;
     ctx.body = createSuccessResponse(ctx.status, 'Successfully updated!', book);
 }
 
-export const deleteBookController = (ctx: Context) => {
+const deleteBook = (ctx: Context) => {
     const { id } = ctx.params;
-    const book = deleteBook(Number(id), ctx.state.user)
+    const book = bookService.deleteBook(Number(id), ctx.state.user)
     ctx.status = 200;
     ctx.body = createSuccessResponse(ctx.status, 'Successfully deleted book!', book);
+}
+
+export const bookController = {
+    getAllBooks,
+    getAllUserBooks,
+    createBook,
+    updateBook,
+    deleteBook,
+    getBookById,
 }

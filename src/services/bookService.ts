@@ -8,21 +8,21 @@ import { BookEntity } from '../schemas/models/bookEntitySchema';
 
 const repository = new BookRepository(db);
 
-export const getAllBooks = (): Promise<BookEntity[]> => {
+const getAllBooks = (): Promise<BookEntity[]> => {
     return repository.getAll()
 }
 
-export const getBookById = (bookId: number, user: Omit<User, 'password'>) => {
+const getBookById = (bookId: number, user: Omit<User, 'password'>) => {
     const book = user.books.find((b: Book) => b.id === bookId);
 
     if (!book) {
-        throw new CustomHttpError(404,`Book doesn't exist or it is not owned by current user! Book ID: ${bookId}`);
+        throw new CustomHttpError(404, `Book doesn't exist or it is not owned by current user! Book ID: ${bookId}`);
     }
 
     return book
 };
 
-export const createBook = (payload: CreateBookPayload, user: Omit<User, 'password'>) => {
+const createBook = (payload: CreateBookPayload, user: Omit<User, 'password'>) => {
     const newBook = {
         id: generateId(),
         ...payload
@@ -33,7 +33,7 @@ export const createBook = (payload: CreateBookPayload, user: Omit<User, 'passwor
     return newBook;
 };
 
-export const updateBook = (bookId: number, payload: UpdateBookPayload, user: Omit<User,'password'>) => {
+const updateBook = (bookId: number, payload: UpdateBookPayload, user: Omit<User, 'password'>) => {
     const book = user.books.find((b: Book) => b.id === bookId);
     if (!book) {
         throw new CustomHttpError(404, `Book doesn't exist or it is not owned by current user! Book ID: ${bookId}`)
@@ -43,12 +43,12 @@ export const updateBook = (bookId: number, payload: UpdateBookPayload, user: Omi
     // user.books = user.books.map((b: Book)=>
     //     b.id === book.id ? updatedBook : b
     // ); // Immutable
-    Object.assign(book,payload); // Mutable
+    Object.assign(book, payload); // Mutable
     return book;
 };
 
-export const deleteBook = (bookId: number, user: Omit<User, 'password'>) => {
-    const book = user.books.find((b:Book) => b.id === bookId);
+const deleteBook = (bookId: number, user: Omit<User, 'password'>) => {
+    const book = user.books.find((b: Book) => b.id === bookId);
 
     if (!book) {
         throw new CustomHttpError(404, `Book doesn't exist or it is not owned by current user! Book ID: ${bookId}`)
@@ -63,6 +63,15 @@ export const deleteBook = (bookId: number, user: Omit<User, 'password'>) => {
     return book;
 };
 
-export function getMutableUser(id: number){
+function getMutableUser(id: number) {
     return data.users.find(user => user.id === id);
+}
+
+export const bookService = {
+    getAllBooks,
+    getBookById,
+    createBook,
+    updateBook,
+    deleteBook,
+
 }

@@ -2,19 +2,18 @@ import Router from '@koa/router';
 import { authMiddleware } from '../../middlewares/authMiddleware';
 import { CreateBookSchema, UpdateBookSchema } from '../../schemas/bookSchemas';
 import { validateBody } from '../../middlewares/validationMiddleware';
-import { createBookController, deleteBookController, getAllBooksController, getAllUserBooksController, getBookByIdController, updateBookController } from '../../controllers/books/booksController';
 import { errorControllerWrapper } from '../../utils/errorHandlerWrapper';
-import { getAllBooks } from '../../services/bookService';
+import { bookController } from '../../controllers/books/booksController';
 
 export const booksRouter = new Router({
     prefix: '/books',
 });
 
-booksRouter.get('/all', authMiddleware, getAllBooksController);
+booksRouter.get('/all', authMiddleware, bookController.getAllBooks);
 
-booksRouter.get('/:id', authMiddleware, errorControllerWrapper(getBookByIdController));
-booksRouter.get('/', authMiddleware, errorControllerWrapper(getAllUserBooksController));
-booksRouter.post('/', authMiddleware, validateBody(CreateBookSchema), errorControllerWrapper(createBookController));
-booksRouter.put('/:id', authMiddleware, validateBody(UpdateBookSchema), errorControllerWrapper(updateBookController));
-booksRouter.delete('/:id', authMiddleware, errorControllerWrapper(deleteBookController));
+booksRouter.get('/:id', authMiddleware, errorControllerWrapper(bookController.getBookById));
+booksRouter.get('/', authMiddleware, errorControllerWrapper(bookController.getAllUserBooks));
+booksRouter.post('/', authMiddleware, validateBody(CreateBookSchema), errorControllerWrapper(bookController.createBook));
+booksRouter.put('/:id', authMiddleware, validateBody(UpdateBookSchema), errorControllerWrapper(bookController.updateBook));
+booksRouter.delete('/:id', authMiddleware, errorControllerWrapper(bookController.deleteBook));
 
