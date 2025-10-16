@@ -1,8 +1,8 @@
-import { User } from '../../data/users';
+import { User, UserEntity } from '../schemas/models/userEntitySchema';
 
 export interface ContextState {
     data?: unknown
-    user: Omit<User, 'password'>
+    user: User
 }
 declare module 'koa' {
   interface DefaultState extends ContextState {

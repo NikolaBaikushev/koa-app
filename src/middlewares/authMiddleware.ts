@@ -1,9 +1,10 @@
 import { Context, Next } from 'koa';
 import passport from '../config/authConfig';
+import { User } from '../schemas/models/userEntitySchema';
 
 export const authMiddleware = async (ctx: Context, next: Next) => {
     return new Promise<void>((resolve, reject) => {
-        passport.authenticate('jwt', { session: false }, (err, user, info) => {
+        passport.authenticate('jwt', { session: false }, (err, user: User, info) => {
             if (err) {
                 ctx.status = 500;
                 ctx.body = { error: 'Internal Server Error' };
@@ -12,16 +13,11 @@ export const authMiddleware = async (ctx: Context, next: Next) => {
 
             if (!user) {
                 ctx.status = 401;
-                ctx.body = { error: 'Unauthorized: Invalid or missing user' };
+                ctx.body = { error: 'Unauthorized: Invalid or Missing user' };
                 return resolve();
             }
 
-            // TODO: Change this from the signing payload on the jwt
-            ctx.state.user = {
-                id: user.id,
-                username: user.username,
-                books: user.books
-            };
+            ctx.state.user = user;
              
             resolve(next());
         })(ctx, next);

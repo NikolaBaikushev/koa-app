@@ -3,33 +3,38 @@ import { data } from '../../data/users';
 import { LoginUserPayload, RegisterUserPayload } from '../schemas/authSchemas';
 import { createErrorResponse, createFailResponse, createSuccessResponse } from '../utils/createResponse';
 import { getContextStateData } from '../utils/getContextStateData';
-import { createToken } from '../utils/createToken';
+import { createToken, JwtTokenPayload } from '../utils/createToken';
 import { CustomHttpError } from '../common/HttpError';
 import { isHttpError } from '../types/guards/isHttpError';
 import { UserRepository } from '../repository/UserRepository';
 import { db, knexSetup } from '../config/knex';
-import { UserEntity } from '../schemas/models/userEntitySchema';
+import { User, UserEntity } from '../schemas/models/userEntitySchema';
 
 const repository = new UserRepository(db);
 
-export const loginUser = (payload: LoginUserPayload) => {
-    const user = data.users.find(u => u.username === payload.username && u.password === payload.password);
+const loginUser = async (payload: LoginUserPayload): Promise<string> => {
+    const user = await repository.findOneBy({ username: payload.username, password: payload.password });
 
     if (!user) {
         throw new CustomHttpError(401, 'Invalid username or password');
     }
-    
-    return createToken({ id: user.id, username: user.username });
+
+    const jwtTokenPayload: JwtTokenPayload = {
+        id: user.id,
+        username: user.username
+    }
+
+    return createToken(jwtTokenPayload);
 };
 
-export const registerUser = async (payload: RegisterUserPayload) => {
-    const { username, password, confirmPassword} = payload;
+const registerUser = async (payload: RegisterUserPayload) => {
+    const { username, password, confirmPassword } = payload;
 
     if (password !== confirmPassword) {
         throw new CustomHttpError(400, 'Passwords don\'t match!');
     }
 
-    const user = await repository.findOneBy({username});
+    const user = await repository.findOneBy({ username });
     if (user) {
         throw new CustomHttpError(400, 'User already exists!')
     }
@@ -42,4 +47,14 @@ export const registerUser = async (payload: RegisterUserPayload) => {
     const result = await repository.create(newUser, ['id', 'username']);
 
     return result;
+}
+
+const getUser = async (id: number, username: string): Promise<User| null> => {
+  return await repository.findOneBy({ username, id }, ['id', 'username']);
+}
+
+export const authService = {
+    registerUser,
+    loginUser,
+    getUser
 }

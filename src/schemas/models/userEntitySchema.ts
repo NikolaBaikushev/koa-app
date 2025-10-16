@@ -6,4 +6,7 @@ export const userEntitySchema = z.object({
     password: z.string().min(1),
 });
 
+// TODO: Add the created_at and updated_at ... 
 export type UserEntity = z.infer<typeof userEntitySchema>;
+
+export type User = Pick<UserEntity, 'id' | 'username'>;

@@ -2,7 +2,7 @@
 import { Knex } from "knex";
 
 interface Writer<T> {
-    create(item: Omit<T, 'id'>, returning: ReturningColumn<T>): Promise<T>
+    create(item: Omit<T, 'id'>, returning: ReturnColumns<T>): Promise<T>
     update(id: string, item: Partial<T>): Promise<boolean>
     delete(id: string): Promise<boolean>
 }
@@ -10,7 +10,7 @@ interface Writer<T> {
 interface Reader<T> {
     find(item: Partial<T>): Promise<T[]>
     findById(id: string | number): Promise<T>
-    findOneBy(item: Partial<T>): Promise<T | null>
+    findOneBy(item: Partial<T>, select: SelectColumns<T>): Promise<T | null>
     getAll(): Promise<T[]>
 }
 
@@ -19,7 +19,8 @@ type BaseRepository<T> = Writer<T> & Reader<T>
 
 
 type StringKeyOf<T> = Extract<keyof T, string>;
-type ReturningColumn<T> = StringKeyOf<T> | Array<StringKeyOf<T>> | '*';
+type ReturnColumns<T> = StringKeyOf<T> | Array<StringKeyOf<T>> | '*';
+type SelectColumns<T> = ReturnColumns<T>;
 
 export abstract class KnexRepository<T> implements BaseRepository<T> {
     protected abstract tableName: string;
@@ -45,7 +46,7 @@ export abstract class KnexRepository<T> implements BaseRepository<T> {
         return this.qb.select('*').from(this.tableName);
     }
 
-    create(data: Omit<T, 'id'>, returning: ReturningColumn<T> = '*'
+    create(data: Omit<T, 'id'>, returning: ReturnColumns<T> = '*'
     ): Promise<T> {
         return this.qb.insert(data).returning(returning).then(rows => rows[0]);
     }
@@ -55,7 +56,8 @@ export abstract class KnexRepository<T> implements BaseRepository<T> {
         return this.qb.select('*').where({ id }).first();
     }
 
-    findOneBy(item: Partial<T>): Promise<T | null> {
-        return this.qb.select('*').where(item).first() ?? null;
+    findOneBy(item: Partial<T>, select: SelectColumns<T> = "*"): Promise<T | null> {
+        return this.qb.select(select).where(item).first() ?? null;
     }
+    
 }
