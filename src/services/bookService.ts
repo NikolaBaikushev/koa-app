@@ -22,6 +22,10 @@ const getBookById = async (id: number) => {
     return book
 };
 
+const getBooksByUserId = async (userId: number): Promise<BookEntity[]> => {
+    return await repository.getBooksByUserId(userId);
+}
+
 // const createBook = (payload: CreateBookPayload, user: Omit<User, 'password'>) => {
 //     const newBook = {
 //         id: generateId(),
@@ -70,6 +74,7 @@ const getBookById = async (id: number) => {
 export const bookService = {
     getAllBooks,
     getBookById,
+    getBooksByUserId,
     // createBook,
     // updateBook,
     // deleteBook,

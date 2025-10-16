@@ -1,10 +1,6 @@
 import { Context } from "koa";
 import { createSuccessResponse } from "../../utils/createResponse";
 import { bookService } from "../../services/bookService";
-import { CreateBookPayload, UpdateBookPayload } from "../../schemas/bookSchemas";
-import { getContextStateData } from "../../utils/getContextStateData";
-import { BookRepository } from "../../repository/BookRepository";
-import { db } from "../../config/knex";
 import { validateParams } from "../../validators/validateParams";
 import { ParamsSchema } from "../../schemas/common/paramsSchema";
 
@@ -15,10 +11,10 @@ const getAllBooks = async (ctx: Context) => {
     ctx.body = createSuccessResponse(ctx.status, '', books)
 }
 
-const getAllUserBooks = (ctx: Context) => {
-    const user = ctx.state.user;
+const getCurrentUserBooks = async (ctx: Context) => {
     ctx.status = 200;
-    // ctx.body = createSuccessResponse(ctx.status, 'Get books', user!.books);
+    const books = await bookService.getBooksByUserId(ctx.state.user.id);
+    ctx.body = createSuccessResponse(ctx.status, 'Get books', books);
 };
 
 const getBookById = async (ctx: Context) => {
@@ -53,7 +49,7 @@ const getBookById = async (ctx: Context) => {
 
 export const bookController = {
     getAllBooks,
-    getAllUserBooks,
+    getCurrentUserBooks,
     // createBook,
     // updateBook,
     // deleteBook,

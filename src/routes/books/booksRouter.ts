@@ -12,7 +12,7 @@ export const booksRouter = new Router({
 booksRouter.get('/all', authMiddleware, bookController.getAllBooks);
 
 booksRouter.get('/:id', authMiddleware, errorControllerWrapper(bookController.getBookById));
-booksRouter.get('/', authMiddleware, errorControllerWrapper(bookController.getAllUserBooks));
+booksRouter.get('/', authMiddleware, errorControllerWrapper(bookController.getCurrentUserBooks));
 // booksRouter.post('/', authMiddleware, validateBody(CreateBookSchema), errorControllerWrapper(bookController.createBook));
 // booksRouter.put('/:id', authMiddleware, validateBody(UpdateBookSchema), errorControllerWrapper(bookController.updateBook));
 // booksRouter.delete('/:id', authMiddleware, errorControllerWrapper(bookController.deleteBook));

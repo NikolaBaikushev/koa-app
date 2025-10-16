@@ -1,7 +1,7 @@
 import Router from '@koa/router';
 import {authRouter} from './auth/authRouter';
 import { booksRouter } from './books/booksRouter';
-import { userRouter } from './user/userRouter';
+import { userRouter } from './users/usersRouter';
 
 // Main router;
 export const router = new Router({
