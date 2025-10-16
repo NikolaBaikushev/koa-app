@@ -1,5 +1,5 @@
 import type { Knex } from 'knex';
-import { UserRole } from '../src/schemas/models/userEntitySchema'
+import { UserRole } from '../src/schemas/models/userEntitySchema';
 
 export async function up(knex: Knex): Promise<void> {
     return knex.schema.createTable('users', (table) => {

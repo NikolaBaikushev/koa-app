@@ -8,13 +8,13 @@ export const authMiddleware = async (ctx: Context, next: Next) => {
         passport.authenticate('jwt', { session: false }, (err, user: User, info) => {
             if (err) {
                 ctx.status = 500;
-                ctx.body = createErrorResponse(ctx.status, 'Internal Server Error', { message: "Oops! Something went wrong. Please try again!"})
+                ctx.body = createErrorResponse(ctx.status, 'Internal Server Error', { message: 'Oops! Something went wrong. Please try again!'});
                 return reject(err);
             }
 
             if (!user) {
                 ctx.status = 401;
-                ctx.body = createErrorResponse(ctx.status, 'Unathorized', { message: "Invalid or Missing User."})
+                ctx.body = createErrorResponse(ctx.status, 'Unathorized', { message: 'Invalid or Missing User.'});
                 return resolve();
             }
 

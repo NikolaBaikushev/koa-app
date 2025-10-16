@@ -1,6 +1,5 @@
 import {z} from 'zod';
 import { UserRole } from './models/userEntitySchema';
-import { userRouter } from '../routes/users/usersRouter';
 export const RegisterUserSchema = z.object({
     username: z.string().nonempty('Username is required!'),
     password: z.string().nonempty('Password is required!'),

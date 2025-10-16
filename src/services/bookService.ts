@@ -3,7 +3,6 @@ import { BookRepository } from '../repository/BookRepository';
 import { db } from '../config/knex';
 import { BookEntity } from '../schemas/models/bookEntitySchema';
 import { CreateBookPayload, UpdateBookPayload } from '../schemas/bookSchemas';
-import { Book } from '../../data/users';
 
 const repository = new BookRepository(db);
 
@@ -32,7 +31,7 @@ const createBook = async (payload: CreateBookPayload): Promise<BookEntity> => {
 const updateBook = async (id: number, payload: UpdateBookPayload): Promise<BookEntity> => {
     const book = await repository.findById(id);
     if (!book) {
-        throw new CustomHttpError(404, `Book with ID: ${id} Not Found`)
+        throw new CustomHttpError(404, `Book with ID: ${id} Not Found`);
     }
 
     return await repository.update(id, payload);
@@ -41,7 +40,7 @@ const updateBook = async (id: number, payload: UpdateBookPayload): Promise<BookE
 const deleteBook = async (id: number) => {
     const book = await repository.findById(id);
     if (!book) {
-        throw new CustomHttpError(404, `Book with ID: ${id} Not Found`)
+        throw new CustomHttpError(404, `Book with ID: ${id} Not Found`);
     }
 
     return await repository.delete(id);
