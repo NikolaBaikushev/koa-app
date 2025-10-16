@@ -13,7 +13,7 @@ booksRouter.get('/all', authMiddleware, bookController.getAllBooks);
 
 booksRouter.get('/:id', authMiddleware, errorControllerWrapper(bookController.getBookById));
 booksRouter.get('/', authMiddleware, errorControllerWrapper(bookController.getAllUserBooks));
-booksRouter.post('/', authMiddleware, validateBody(CreateBookSchema), errorControllerWrapper(bookController.createBook));
-booksRouter.put('/:id', authMiddleware, validateBody(UpdateBookSchema), errorControllerWrapper(bookController.updateBook));
-booksRouter.delete('/:id', authMiddleware, errorControllerWrapper(bookController.deleteBook));
+// booksRouter.post('/', authMiddleware, validateBody(CreateBookSchema), errorControllerWrapper(bookController.createBook));
+// booksRouter.put('/:id', authMiddleware, validateBody(UpdateBookSchema), errorControllerWrapper(bookController.updateBook));
+// booksRouter.delete('/:id', authMiddleware, errorControllerWrapper(bookController.deleteBook));
 
