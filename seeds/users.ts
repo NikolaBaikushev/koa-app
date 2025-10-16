@@ -1,20 +1,25 @@
 import { Knex } from 'knex';
+import { UserRole } from '../src/schemas/models/userEntitySchema';
 export const DB_USER_SEEDS = [
     {
         username: 'test',
-        password: 'test'
+        password: 'test',
+        role: UserRole.AUTHOR
     },
     {
         username: 'sony',
-        password: 'sony'
+        password: 'sony',
+        role: UserRole.USER
     },
     {
         username: 'john',
-        password: 'john'
+        password: 'john',
+        role: UserRole.USER
     },
     {
         username: 'papi',
-        password: 'papi'
+        password: 'papi',
+        role: UserRole.USER
     },
 ] as const;
 

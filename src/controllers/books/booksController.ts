@@ -31,11 +31,10 @@ const getBookById = async (ctx: Context) => {
 //     ctx.body = createSuccessResponse(ctx.status, 'Successfully created book!', book);
 // }
 
-// const updateBook = (ctx: Context) => {
-//     const { id } = ctx.params;
-
+// const updateBook = async (ctx: Context) => {
+//     const { id } = validateParams(ctx, ParamsSchema);
 //     const payload = getContextStateData<UpdateBookPayload>(ctx);
-//     const book = bookService.updateBook(Number(id), payload, ctx.state.user);
+//     const book = await bookService.updateBook(id, payload);
 //     ctx.status = 200;
 //     ctx.body = createSuccessResponse(ctx.status, 'Successfully updated!', book);
 // }

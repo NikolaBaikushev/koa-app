@@ -23,7 +23,7 @@ const loginUser = async (payload: LoginUserPayload): Promise<string> => {
 };
 
 const registerUser = async (payload: RegisterUserPayload) => {
-    const { username, password, confirmPassword } = payload;
+    const { username, password, confirmPassword, role } = payload;
 
     if (password !== confirmPassword) {
         throw new CustomHttpError(400, 'Passwords don\'t match!');
@@ -34,18 +34,19 @@ const registerUser = async (payload: RegisterUserPayload) => {
         throw new CustomHttpError(400, 'User already exists!');
     }
 
-    const newUser: Pick<UserEntity, 'username' | 'password'> = {
+    const newUser: Pick<UserEntity, 'username' | 'password' | 'role'> = {
         username,
         password,
+        role,
     };
 
-    const result = await repository.create(newUser, ['id', 'username']);
+    const result = await repository.create(newUser, ['id', 'username', 'role']);
 
     return result;
 };
 
 const getUser = async (id: number, username: string): Promise<User| null> => {
-    return await repository.findOneBy({ username, id }, ['id', 'username']);
+    return await repository.findOneBy({ username, id }, ['id', 'username', 'role']);
 };
 
 export const authService = {
