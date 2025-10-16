@@ -1,15 +1,15 @@
-import { Context } from "koa";
-import { createSuccessResponse } from "../../utils/createResponse";
-import { bookService } from "../../services/bookService";
-import { validateParams } from "../../validators/validateParams";
-import { ParamsSchema } from "../../schemas/common/paramsSchema";
+import { Context } from 'koa';
+import { createSuccessResponse } from '../../utils/createResponse';
+import { bookService } from '../../services/bookService';
+import { validateParams } from '../../validators/validateParams';
+import { ParamsSchema } from '../../schemas/common/paramsSchema';
 
 
 const getAllBooks = async (ctx: Context) => {
     const books = await bookService.getAllBooks();
     ctx.status = 201;
-    ctx.body = createSuccessResponse(ctx.status, '', books)
-}
+    ctx.body = createSuccessResponse(ctx.status, '', books);
+};
 
 const getCurrentUserBooks = async (ctx: Context) => {
     ctx.status = 200;
@@ -54,4 +54,4 @@ export const bookController = {
     // updateBook,
     // deleteBook,
     getBookById,
-}
+};

@@ -1,7 +1,7 @@
 
-import knex from "knex";
-import dotenv from "dotenv";
-import { config } from "../../config";
+import knex from 'knex';
+import dotenv from 'dotenv';
+import { config } from '../../config';
 
 dotenv.config();
 
@@ -14,6 +14,6 @@ const setup = {
         password: config.POSTGRES_PASSWORD,
         database: config.POSTGRES_DB,
     }
-}
+};
 export const knexSetup = setup;
 export const db = knex(setup);

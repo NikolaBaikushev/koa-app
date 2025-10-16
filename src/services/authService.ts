@@ -1,13 +1,8 @@
-import { Context } from 'koa';
-import { data } from '../../data/users';
 import { LoginUserPayload, RegisterUserPayload } from '../schemas/authSchemas';
-import { createErrorResponse, createFailResponse, createSuccessResponse } from '../utils/createResponse';
-import { getContextStateData } from '../utils/getContextStateData';
 import { createToken, JwtTokenPayload } from '../utils/createToken';
 import { CustomHttpError } from '../common/HttpError';
-import { isHttpError } from '../types/guards/isHttpError';
 import { UserRepository } from '../repository/UserRepository';
-import { db, knexSetup } from '../config/knex';
+import { db } from '../config/knex';
 import { User, UserEntity } from '../schemas/models/userEntitySchema';
 
 const repository = new UserRepository(db);
@@ -22,7 +17,7 @@ const loginUser = async (payload: LoginUserPayload): Promise<string> => {
     const jwtTokenPayload: JwtTokenPayload = {
         id: user.id,
         username: user.username
-    }
+    };
 
     return createToken(jwtTokenPayload);
 };
@@ -36,7 +31,7 @@ const registerUser = async (payload: RegisterUserPayload) => {
 
     const user = await repository.findOneBy({ username });
     if (user) {
-        throw new CustomHttpError(400, 'User already exists!')
+        throw new CustomHttpError(400, 'User already exists!');
     }
 
     const newUser: Pick<UserEntity, 'username' | 'password'> = {
@@ -47,14 +42,14 @@ const registerUser = async (payload: RegisterUserPayload) => {
     const result = await repository.create(newUser, ['id', 'username']);
 
     return result;
-}
+};
 
 const getUser = async (id: number, username: string): Promise<User| null> => {
-  return await repository.findOneBy({ username, id }, ['id', 'username']);
-}
+    return await repository.findOneBy({ username, id }, ['id', 'username']);
+};
 
 export const authService = {
     registerUser,
     loginUser,
     getUser
-}
+};

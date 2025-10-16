@@ -1,30 +1,27 @@
-import { CreateBookPayload, UpdateBookPayload } from '../schemas/bookSchemas';
-import { generateId } from '../utils/generateId';
 import { CustomHttpError } from '../common/HttpError';
 import { BookRepository } from '../repository/BookRepository';
 import { db } from '../config/knex';
 import { BookEntity } from '../schemas/models/bookEntitySchema';
-import { User } from '../schemas/models/userEntitySchema';
 
 const repository = new BookRepository(db);
 
 const getAllBooks = (): Promise<BookEntity[]> => {
-    return repository.getAll()
-}
+    return repository.getAll();
+};
 
 const getBookById = async (id: number) => {
-    const book = await repository.findById(id)
+    const book = await repository.findById(id);
 
     if (!book) {
         throw new CustomHttpError(404, `Book with ID: ${id} not found! `);
     }
 
-    return book
+    return book;
 };
 
 const getBooksByUserId = async (userId: number): Promise<BookEntity[]> => {
     return await repository.getBooksByUserId(userId);
-}
+};
 
 // const createBook = (payload: CreateBookPayload, user: Omit<User, 'password'>) => {
 //     const newBook = {
@@ -79,4 +76,4 @@ export const bookService = {
     // updateBook,
     // deleteBook,
 
-}
+};

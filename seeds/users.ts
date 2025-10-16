@@ -1,4 +1,4 @@
-import { Knex } from "knex";
+import { Knex } from 'knex';
 export const DB_USER_SEEDS = [
     {
         username: 'test',
@@ -21,5 +21,5 @@ export const DB_USER_SEEDS = [
 export async function seed(knex: Knex): Promise<void> {
     await knex('users').del();
 
-    await knex('users').insert(DB_USER_SEEDS)
+    await knex('users').insert(DB_USER_SEEDS);
 };

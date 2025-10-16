@@ -1,7 +1,5 @@
 import Router from '@koa/router';
 import { authMiddleware } from '../../middlewares/authMiddleware';
-import { CreateBookSchema, UpdateBookSchema } from '../../schemas/bookSchemas';
-import { validateBody } from '../../middlewares/validationMiddleware';
 import { errorControllerWrapper } from '../../utils/errorHandlerWrapper';
 import { bookController } from '../../controllers/books/booksController';
 

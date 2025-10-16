@@ -1,4 +1,4 @@
-import type { Knex } from "knex";
+import type { Knex } from 'knex';
 
 
 export async function up(knex: Knex): Promise<void> {
@@ -7,7 +7,7 @@ export async function up(knex: Knex): Promise<void> {
         table.string('username').notNullable().unique();
         table.string('password').notNullable();
         table.timestamps(true, true);
-    })
+    });
 }
 
 

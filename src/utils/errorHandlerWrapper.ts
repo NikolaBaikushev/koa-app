@@ -1,12 +1,12 @@
-import { Context, Next } from "koa";
-import { isHttpError } from "../types/guards/isHttpError";
-import { createErrorResponse, createFailResponse } from "./createResponse";
+import { Context, Next } from 'koa';
+import { isHttpError } from '../types/guards/isHttpError';
+import { createErrorResponse, createFailResponse } from './createResponse';
 
 
 export const errorControllerWrapper = (controller: (ctx: Context) => Promise<void> | void) => {
     return async (ctx: Context, next: Next) => {
         try {
-            await controller(ctx)
+            await controller(ctx);
         } catch (err) {
             if (isHttpError(err)) {
                 ctx.status = err.status;
@@ -19,5 +19,5 @@ export const errorControllerWrapper = (controller: (ctx: Context) => Promise<voi
             ctx.body = createErrorResponse(ctx.status, 'Something went wrong', {});
 
         }
-    }
-}
+    };
+};

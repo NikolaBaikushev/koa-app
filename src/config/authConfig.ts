@@ -1,7 +1,6 @@
 import passport from 'koa-passport';
 import { Strategy as JwtStrategy, ExtractJwt, type StrategyOptions } from 'passport-jwt';
 import { config } from '../../config';
-import { data } from '../../data/users';
 import { JwtTokenPayload } from '../utils/createToken';
 import { authService } from '../services/authService';
 import { User } from '../schemas/models/userEntitySchema';

@@ -1,10 +1,10 @@
 
 export class CustomHttpError extends Error {
-  status: number;
+    status: number;
 
-  constructor(status: number, message: string) {
-    super(message);
-    this.status = status;
-    Object.setPrototypeOf(this, CustomHttpError.prototype);
-  }
+    constructor(status: number, message: string) {
+        super(message);
+        this.status = status;
+        Object.setPrototypeOf(this, CustomHttpError.prototype);
+    }
 }

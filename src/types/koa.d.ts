@@ -1,4 +1,4 @@
-import { User, UserEntity } from '../schemas/models/userEntitySchema';
+import { User } from '../schemas/models/userEntitySchema';
 
 export interface ContextState {
     data?: unknown

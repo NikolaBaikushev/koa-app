@@ -10,7 +10,7 @@ import logger from './config/logger';
 
 const app = new Koa();
     
-app.use(koaPinoLogger({logger}))
+app.use(koaPinoLogger({logger}));
 app.use(json());
 app.use(bodyParser());
 app.use(passport.initialize());

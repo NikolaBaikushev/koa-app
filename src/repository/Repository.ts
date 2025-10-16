@@ -1,5 +1,5 @@
 
-import { Knex } from "knex";
+import { Knex } from 'knex';
 
 interface Writer<T> {
     create(item: CreateEntity<T>, returning: ReturnColumns<T>): Promise<T>
@@ -34,15 +34,15 @@ export abstract class KnexRepository<T> implements BaseRepository<T> {
     }
 
     update(id: string, item: Partial<T>): Promise<boolean> {
-        throw new Error("Not implemented")
+        throw new Error('Not implemented');
     }
 
     delete(id: string): Promise<boolean> {
-        throw new Error("Not implemented")
+        throw new Error('Not implemented');
     }
 
     find(item: Partial<T>): Promise<T[]> {
-        throw new Error("Not implemented")
+        throw new Error('Not implemented');
     }
 
     getAll() {
@@ -59,7 +59,7 @@ export abstract class KnexRepository<T> implements BaseRepository<T> {
         return this.qb.select(select).where({ id }).first();
     }
 
-    findOneBy(item: Partial<T>, select: SelectColumns<T> = "*"): Promise<T | null> {
+    findOneBy(item: Partial<T>, select: SelectColumns<T> = '*'): Promise<T | null> {
         return this.qb.select(select).where(item).first() ?? null;
     }
     
