@@ -13,7 +13,7 @@ const getUserById = async (id: number): Promise<User> => {
     return user;
 };
 
-const addBookToCurrentUser = async (bookId: number, userId: number) => {
+const addBookToUser = async (bookId: number, userId: number) => {
     const book = await usersBooksRepository.findOneBy({user_id: userId, book_id: bookId});
     if (book) {
         throw new CustomHttpError(400, 'User already has this book!');
@@ -24,17 +24,19 @@ const addBookToCurrentUser = async (bookId: number, userId: number) => {
     })
 }
 
-const removeBookFromCurrentUser = async (bookId: number, userId: number) => {
+
+const removeBookFromUser = async (bookId: number, userId: number) => {
     const book = await usersBooksRepository.findOneBy({book_id: bookId, user_id: userId});
     if (!book) {
-        throw new CustomHttpError(404, 'Book doesn\'t belong to current user or doesn\'t exist');
+        throw new CustomHttpError(404, 'Book doesn\'t belong to this user or doesn\'t exist at all');
     }
     return await usersBooksRepository.removeBookFromUser(book.user_id, book.book_id);
 }
 
+
 export const userService = {
     getUserById,
-    addBookToCurrentUser,
-    removeBookFromCurrentUser
+    addBookToUser,
+    removeBookFromUser
 };
 
