@@ -16,7 +16,8 @@ const loginUser = async (payload: LoginUserPayload): Promise<string> => {
 
     const jwtTokenPayload: JwtTokenPayload = {
         id: user.id,
-        username: user.username
+        username: user.username,
+        role: user.role
     };
 
     return createToken(jwtTokenPayload);
@@ -45,7 +46,7 @@ const registerUser = async (payload: RegisterUserPayload) => {
     return result;
 };
 
-const getUser = async (id: number, username: string): Promise<User| null> => {
+const getUser = async (id: number, username: string): Promise<User | null> => {
     return await repository.findOneBy({ username, id }, ['id', 'username', 'role']);
 };
 
