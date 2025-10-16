@@ -2,7 +2,7 @@
 import { Knex } from "knex";
 
 interface Writer<T> {
-    create(item: Omit<T, 'id'>, returning: ReturnColumns<T>): Promise<T>
+    create(item: CreateEntity<T>, returning: ReturnColumns<T>): Promise<T>
     update(id: string, item: Partial<T>): Promise<boolean>
     delete(id: string): Promise<boolean>
 }
@@ -21,6 +21,9 @@ type BaseRepository<T> = Writer<T> & Reader<T>
 type StringKeyOf<T> = Extract<keyof T, string>;
 type ReturnColumns<T> = StringKeyOf<T> | Array<StringKeyOf<T>> | '*';
 type SelectColumns<T> = ReturnColumns<T>;
+
+
+type CreateEntity<T> = Omit<T, 'id' | 'created_at' | 'updated_at'>;
 
 export abstract class KnexRepository<T> implements BaseRepository<T> {
     protected abstract tableName: string;
@@ -46,7 +49,7 @@ export abstract class KnexRepository<T> implements BaseRepository<T> {
         return this.qb.select('*').from(this.tableName);
     }
 
-    create(data: Omit<T, 'id'>, returning: ReturnColumns<T> = '*'
+    create(data: CreateEntity<T>, returning: ReturnColumns<T> = '*'
     ): Promise<T> {
         return this.qb.insert(data).returning(returning).then(rows => rows[0]);
     }

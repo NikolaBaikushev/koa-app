@@ -39,7 +39,7 @@ const registerUser = async (payload: RegisterUserPayload) => {
         throw new CustomHttpError(400, 'User already exists!')
     }
 
-    const newUser: Omit<UserEntity, 'id'> = {
+    const newUser: Pick<UserEntity, 'username' | 'password'> = {
         username,
         password,
     };
