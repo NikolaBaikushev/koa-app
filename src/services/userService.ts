@@ -1,17 +1,22 @@
 import { Context } from 'vm';
 import { data } from '../../data/users';
 import { createFailResponse, createSuccessResponse } from '../utils/createResponse';
+import { UserRepository } from '../repository/UserRepository';
+import { db } from '../config/knex';
+import { CustomHttpError } from '../common/HttpError';
+import { User } from '../schemas/models/userEntitySchema';
 
-export const getBooksByUserId = (ctx: Context) => {
-    const { id } = ctx.params;
-    const user = data.users.find(u => u.id === Number(id));
+const repository = new UserRepository(db);
+
+const getUserById = async (id: number): Promise<User> => {
+    const user = await repository.findById(id, ['id', 'username']);
     if (!user) {
-        ctx.status = 400;
-        ctx.body = createFailResponse(ctx.status, 'User doesn\'t exist!');
-        return;
+        throw new CustomHttpError(404, `User with ID: ${id} Not Found!`)
     }
-
-    ctx.status = 200;
-    ctx.body = createSuccessResponse(ctx.status, '', user.books);
+    return user;
 };
+
+export const userService = {
+    getUserById,
+}
 
