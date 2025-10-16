@@ -8,3 +8,6 @@ export const userRouter = new Router({
 });
 
 userRouter.get('/:id/books', authMiddleware, errorControllerWrapper(userController.getBooksByUserId));
+userRouter.post('/books/:id', authMiddleware, errorControllerWrapper(userController.addBookToCurrentUser));
+userRouter.delete('/books/:id', authMiddleware, errorControllerWrapper(userController.removeBookFromCurrentUser));
+// userRouter.post('/:userId/books/:bookId', authMiddleware, errorControllerWrapper(userController.));

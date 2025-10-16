@@ -1,5 +1,4 @@
 import Router from '@koa/router';
-import { data } from '../../../data/users';
 import { authMiddleware } from '../../middlewares/authMiddleware';
 import { validateBody } from '../../middlewares/validationMiddleware';
 import { LoginUserSchema, RegisterUserSchema } from '../../schemas/authSchemas';
@@ -11,7 +10,7 @@ export const authRouter = new Router({
 });
 
 authRouter.get('/users', authMiddleware, (ctx) => {
-    ctx.body = data;
+    ctx.body = []
 });
 authRouter.post('/login', validateBody(LoginUserSchema), errorControllerWrapper(authController.loginUser));
 authRouter.post('/register', validateBody(RegisterUserSchema), errorControllerWrapper(authController.registerUser));

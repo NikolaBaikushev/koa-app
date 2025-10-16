@@ -3,7 +3,7 @@ import { UserBook } from "../schemas/models/userBookEntitySchema";
 import { KnexRepository } from "./Repository";
 
 export class UserBookRepository extends KnexRepository<UserBook> {
-    protected tableName: string = 'usesr_books';
+    protected tableName: string = 'users_books';
 
     static #instance: UserBookRepository;
 
@@ -19,6 +19,10 @@ export class UserBookRepository extends KnexRepository<UserBook> {
             this.#instance = new UserBookRepository(knex);
         }
         return this.#instance;
+    }
+
+    async removeBookFromUser(userId: number, bookId: number) {
+        return this.qb.where({ user_id: userId, book_id: bookId }).delete().returning('*').then(rows => rows[0]);
     }
 
 }
