@@ -14,7 +14,7 @@ const getUserById = async (id: number): Promise<User> => {
 };
 
 const addBookToUser = async (bookId: number, userId: number) => {
-    const user = await repository.findById(userId)
+    const user = await repository.findById(userId);
     if (!user) {
         throw new CustomHttpError(404, 'User doesn\'t exist!');
     }
@@ -31,7 +31,7 @@ const addBookToUser = async (bookId: number, userId: number) => {
 
 
 const removeBookFromUser = async (bookId: number, userId: number) => {
-    const user = await repository.findById(userId)
+    const user = await repository.findById(userId);
     if (!user) {
         throw new CustomHttpError(404, 'User doesn\'t exist!');
     }

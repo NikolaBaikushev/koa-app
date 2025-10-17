@@ -1,15 +1,14 @@
-import { CustomHttpError } from "../common/HttpError";
-import { RepositoryManager } from "../repository/RepositoryManager";
-import { BookEntity } from "../schemas/models/bookEntitySchema";
-import { UserBookEntity } from "../schemas/models/userBookEntitySchema";
-import { UserEntity } from "../schemas/models/userEntitySchema";
-import { userService } from "./userService";
+import { CustomHttpError } from '../common/HttpError';
+import { RepositoryManager } from '../repository/RepositoryManager';
+import { UserBookEntity } from '../schemas/models/userBookEntitySchema';
+import { UserEntity } from '../schemas/models/userEntitySchema';
+import { userService } from './userService';
 
 describe('userService', () => {
     const repository = RepositoryManager.UsersRepository;
     const usersBooksRepository = RepositoryManager.UsersBooksRepository;
 
-    afterEach(() => jest.clearAllMocks())
+    afterEach(() => jest.clearAllMocks());
 
     describe('userService.getUserById', () => {
         it('should return user', async () => {
@@ -18,8 +17,8 @@ describe('userService', () => {
             const result = await userService.getUserById(id);
 
             expect(result).toMatchObject({ id, username: 'asd' });
-            expect(repository.findById).toHaveBeenCalledWith(id, ['id', 'username'])
-        })
+            expect(repository.findById).toHaveBeenCalledWith(id, ['id', 'username']);
+        });
 
         it('should throw error when user not found', async () => {
             const id = 1;
@@ -28,14 +27,14 @@ describe('userService', () => {
 
             try {
                 await userService.getUserById(id);
-                expect(repository.findById).toHaveBeenCalledWith(id, ['id', 'username'])
+                expect(repository.findById).toHaveBeenCalledWith(id, ['id', 'username']);
             } catch (err: any) {
                 expect(err).toBeInstanceOf(CustomHttpError);
                 expect(err.status).toEqual(404);
                 expect(err.message).toEqual(`User with ID: ${id} Not Found!`);
             }
-        })
-    })
+        });
+    });
 
     describe('userService.addBookToUser', () => {
         const userId = 1;
@@ -57,7 +56,7 @@ describe('userService', () => {
             expect(repository.findById).toHaveBeenCalledWith(userId);
             expect(usersBooksRepository.findOneBy).toHaveBeenCalledWith(createResult);
             expect(usersBooksRepository.create).toHaveBeenCalledWith(createResult);
-        })
+        });
 
         it('should throw error when user is not found', async () => {
 
@@ -65,13 +64,13 @@ describe('userService', () => {
 
             try {
                 await userService.addBookToUser(bookId, userId);
-                expect(repository.findById).toHaveBeenCalledWith(userId)
+                expect(repository.findById).toHaveBeenCalledWith(userId);
             } catch (err: any) {
                 expect(err).toBeInstanceOf(CustomHttpError);
                 expect(err.status).toEqual(404);
                 expect(err.message).toEqual('User doesn\'t exist!');
             }
-        })
+        });
 
         it('should throw error when user already has the book', async () => {
             jest.spyOn(repository, 'findById').mockResolvedValue({id: userId} as UserEntity);
@@ -79,15 +78,15 @@ describe('userService', () => {
 
             try {
                 await userService.addBookToUser(bookId, userId);
-                expect(repository.findById).toHaveBeenCalledWith(userId)
+                expect(repository.findById).toHaveBeenCalledWith(userId);
                 expect(usersBooksRepository.findOneBy).toHaveBeenCalled();
             } catch (err: any) {
                 expect(err).toBeInstanceOf(CustomHttpError);
                 expect(err.status).toEqual(400);
                 expect(err.message).toEqual('User already has this book!');
             }
-        })
-    })
+        });
+    });
     describe('userService.removeBookFromUser', () => {
         const userId = 1;
         const bookId = 1;
@@ -105,20 +104,20 @@ describe('userService', () => {
             expect(repository.findById).toHaveBeenCalledWith(userId);
             expect(usersBooksRepository.findOneBy).toHaveBeenCalledWith(returned);
             expect(usersBooksRepository.removeBookFromUser).toHaveBeenCalledWith(returned.book_id, returned.user_id);
-        })
+        });
 
         it('should throw error when user is not found', async () => {
             jest.spyOn(repository, 'findById').mockResolvedValue(null);
 
             try {
                 await userService.removeBookFromUser(bookId, userId);
-                expect(repository.findById).toHaveBeenCalledWith(userId)
+                expect(repository.findById).toHaveBeenCalledWith(userId);
             } catch (err: any) {
                 expect(err).toBeInstanceOf(CustomHttpError);
                 expect(err.status).toEqual(404);
                 expect(err.message).toEqual('User doesn\'t exist!');
             }
-        })
+        });
 
         it('should throw error when book is not found', async () => {
             jest.spyOn(repository, 'findById').mockResolvedValue({id: userId} as UserEntity);
@@ -126,13 +125,13 @@ describe('userService', () => {
 
             try {
                 await userService.removeBookFromUser(bookId, userId);
-                expect(repository.findById).toHaveBeenCalledWith(userId)
+                expect(repository.findById).toHaveBeenCalledWith(userId);
                 expect(usersBooksRepository.findOneBy).toHaveBeenCalled();
             } catch (err: any) {
                 expect(err).toBeInstanceOf(CustomHttpError);
                 expect(err.status).toEqual(404);
                 expect(err.message).toEqual('Book doesn\'t belong to this user or doesn\'t exist at all');
             }
-        })
-    })
-})
+        });
+    });
+});
