@@ -14,6 +14,11 @@ const getUserById = async (id: number): Promise<User> => {
 };
 
 const addBookToUser = async (bookId: number, userId: number) => {
+    const user = await repository.findById(userId)
+    if (!user) {
+        throw new CustomHttpError(404, 'User doesn\'t exist!');
+    }
+
     const book = await usersBooksRepository.findOneBy({user_id: userId, book_id: bookId});
     if (book) {
         throw new CustomHttpError(400, 'User already has this book!');
@@ -26,6 +31,11 @@ const addBookToUser = async (bookId: number, userId: number) => {
 
 
 const removeBookFromUser = async (bookId: number, userId: number) => {
+    const user = await repository.findById(userId)
+    if (!user) {
+        throw new CustomHttpError(404, 'User doesn\'t exist!');
+    }
+    
     const book = await usersBooksRepository.findOneBy({book_id: bookId, user_id: userId});
     if (!book) {
         throw new CustomHttpError(404, 'Book doesn\'t belong to this user or doesn\'t exist at all');

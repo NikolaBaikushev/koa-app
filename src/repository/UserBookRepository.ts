@@ -1,8 +1,8 @@
 import { Knex } from 'knex';
-import { UserBook } from '../schemas/models/userBookEntitySchema';
+import { UserBookEntity } from '../schemas/models/userBookEntitySchema';
 import { KnexRepository } from './Repository';
 
-export class UserBookRepository extends KnexRepository<UserBook> {
+export class UserBookRepository extends KnexRepository<UserBookEntity> {
     protected tableName: string = 'users_books';
 
     static #instance: UserBookRepository;
@@ -21,7 +21,7 @@ export class UserBookRepository extends KnexRepository<UserBook> {
         return this.#instance;
     }
 
-    async removeBookFromUser(userId: number, bookId: number) {
+    async removeBookFromUser(userId: number, bookId: number): Promise<UserBookEntity> {
         return this.qb.where({ user_id: userId, book_id: bookId }).delete().returning('*').then(rows => rows[0]);
     }
 

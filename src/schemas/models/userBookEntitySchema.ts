@@ -5,4 +5,4 @@ export const userBookSchema = z.object({
     user_id: z.number().int().nonnegative(),
 });
 
-export type UserBook = z.infer<typeof userBookSchema>;
+export type UserBookEntity = z.infer<typeof userBookSchema>;
