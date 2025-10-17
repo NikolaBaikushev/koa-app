@@ -6,7 +6,6 @@
   "author": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "NODE_ENV=development nodemon --exec ts-node src/app.ts",
     "start:prod": "NODE_ENV=production nodemon --exec ts-node src/app.ts",
     "build": "tsc",
@@ -14,7 +13,8 @@
     "migrations:make": "knex migrate:make",
     "migrations": "knex migrate:latest",
     "seeds:make": "knex seed:make",
-    "seeds": "knex seed:run"
+    "seeds": "knex seed:run",
+    "test": "jest --coverage"
   },
   "dependencies": {
     "@koa/bodyparser": "^6.0.0",
@@ -34,6 +34,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.37.0",
+    "@types/jest": "^30.0.0",
     "@types/koa": "^3.0.0",
     "@types/koa__router": "^12.0.4",
     "@types/koa-bodyparser": "^4.3.12",
@@ -46,9 +47,11 @@
     "eslint": "^9.37.0",
     "eslint-plugin-unused-imports": "^4.2.0",
     "globals": "^16.4.0",
+    "jest": "^30.2.0",
     "jiti": "^2.6.1",
     "nodemon": "^3.1.10",
     "pino-pretty": "^13.1.2",
+    "ts-jest": "^29.4.5",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.46.0"
