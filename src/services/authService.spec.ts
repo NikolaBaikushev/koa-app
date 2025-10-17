@@ -1,11 +1,9 @@
-import { RepositoryManager } from "../repository/RepositoryManager";
-import { authService } from "./authService";
-import { UserEntity, UserRole } from "../schemas/models/userEntitySchema";
+import { RepositoryManager } from '../repository/RepositoryManager';
+import { authService } from './authService';
+import { UserEntity, UserRole } from '../schemas/models/userEntitySchema';
 import * as createTokenUtil from '../utils/createToken';
-import { CustomHttpError } from "../common/HttpError";
-import { LoginUserPayload, RegisterUserPayload } from "../schemas/authSchemas";
-import { UserRepository } from "../repository/UserRepository";
-import { register } from "module";
+import { CustomHttpError } from '../common/HttpError';
+import { LoginUserPayload, RegisterUserPayload } from '../schemas/authSchemas';
 
 
 describe('authService', () => {
@@ -31,11 +29,11 @@ describe('authService', () => {
             const payload: LoginUserPayload = {
                 username: user.username,
                 password: user.password
-            }
+            };
 
             const result = await authService.loginUser(payload);
 
-            expect(result).toEqual("some_token_name");
+            expect(result).toEqual('some_token_name');
             
             expect(usersRepository.findOneBy).toHaveBeenCalledWith(payload);
             expect(createTokenUtil.createToken).toHaveBeenCalled();
@@ -82,14 +80,14 @@ describe('authService', () => {
 
             expect(result).toBe(user);
 
-        })
+        });
         it('should throw if passwords are not matching', async () => {
             const payload: RegisterUserPayload = {
                 password: 'asd',
                 confirmPassword: 'dsa',
                 username: 'user',
                 role: UserRole.USER,
-            }
+            };
 
             try {
                 await authService.registerUser(payload);
@@ -99,7 +97,7 @@ describe('authService', () => {
                 expect(err.status).toEqual(400);
                 expect(err.message).toEqual('Passwords don\'t match!');
             }
-        })
+        });
 
         it('should throw if user already exists', async () => {
             const payload = {} as RegisterUserPayload;
@@ -116,6 +114,6 @@ describe('authService', () => {
 
 
             }
-        })
+        });
     });
-})
+});
