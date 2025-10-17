@@ -9,7 +9,7 @@ interface Writer<T> {
 
 interface Reader<T> {
     find(item: Partial<T>): Promise<T[]>
-    findById(id: string | number, select: SelectColumns<T>): Promise<T>
+    findById(id: string | number, select: SelectColumns<T>): Promise<T | null>
     findOneBy(item: Partial<T>, select: SelectColumns<T>): Promise<T | null>
     getAll(): Promise<T[]>
 }
@@ -58,8 +58,8 @@ export abstract class KnexRepository<T> implements BaseRepository<T> {
     }
 
 
-    findById(id: string | number, select: SelectColumns<T> = '*'): Promise<T> {
-        return this.qb.select(select).where({ id }).first();
+    findById(id: string | number, select: SelectColumns<T> = '*'): Promise<T | null> {
+        return this.qb.select(select).where({ id }).first() ?? null;
     }
 
     findOneBy(item: Partial<T>, select: SelectColumns<T> = '*'): Promise<T | null> {

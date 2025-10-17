@@ -5,15 +5,15 @@ import { RepositoryManager } from '../repository/RepositoryManager';
 
 const repository = RepositoryManager.BooksRepository;
 
-const getAllBooks = (): Promise<BookEntity[]> => {
-    return repository.getAll();
+const getAllBooks = async (): Promise<BookEntity[]> => {
+    return await repository.getAll();
 };
 
 const getBookById = async (id: number) => {
     const book = await repository.findById(id);
 
     if (!book) {
-        throw new CustomHttpError(404, `Book with ID: ${id} not found! `);
+        throw new CustomHttpError(404, `Book with ID: ${id} not found!`);
     }
 
     return book;
