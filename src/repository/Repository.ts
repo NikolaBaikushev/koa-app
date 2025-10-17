@@ -48,8 +48,8 @@ export abstract class KnexRepository<T> implements BaseRepository<T> {
         throw new Error('Not implemented');
     }
 
-    getAll() {
-        return this.qb.select('*').from(this.tableName);
+    getAll(): Promise<T[]> {
+        return this.qb.select('*').from(this.tableName).then(rows => rows as T[]);
     }
 
     async create(data: CreateEntity<T>, returning: ReturnColumns<T> = '*'

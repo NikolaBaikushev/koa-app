@@ -14,8 +14,25 @@ const config: Config = {
     "<rootDir>/src/**/*.test.ts",
     "<rootDir>/tests/**/*.(spec|test).ts"
   ],
-
-  // Optional: exclude build folders if you have any
+  collectCoverage: true,
+  collectCoverageFrom: [
+    "src/**/*.{ts,tsx}",
+    "!src/**/*.spec.ts", 
+    "!src/**/*.test.ts",
+    "!src/types/**",     
+    "!src/config/**",  
+    "!src/app.ts",      
+  ],
+  coverageDirectory: "coverage", 
+  coverageReporters: ["text", "lcov", "html"], 
+  coverageThreshold: {
+    "global": {
+      "statements": 90,
+      "branches": 80,
+      "functions": 90,
+      "lines": 90
+    }
+  },
   modulePathIgnorePatterns: ["<rootDir>/dist/"],
 };
 
