@@ -25,7 +25,7 @@ const removeBookFromCurrentUser = async (ctx: Context) => {
     const { id } = validateParams(ctx, ParamsSchema);
     const result = await userService.removeBookFromUser(id, ctx.state.user.id);
     ctx.status = 201;
-    ctx.body = createSuccessResponse(ctx.status, `Successfully removed book (ID:${id}) from user (${ctx.state.user.id})`, result);
+    ctx.body = createSuccessResponse(ctx.status, `Successfully removed book (ID:${id}) from user (ID:${ctx.state.user.id})`, result);
 };
 
 const addBookToSpecificUser = async (ctx: Context) => {
@@ -39,7 +39,7 @@ const removeBookFromSpecificUser = async (ctx: Context) => {
     const { userId, bookId } = validateParams(ctx, createParamSchema('userId', 'bookId'));
     const result = await userService.removeBookFromUser(bookId as number, userId as number);
     ctx.status = 201;
-    ctx.body = createSuccessResponse(ctx.status, `Successfully removed book (ID:${bookId}) from user (${userId})`, result);
+    ctx.body = createSuccessResponse(ctx.status, `Successfully removed book (ID:${bookId}) from user (ID:${userId})`, result);
 };
 
 
