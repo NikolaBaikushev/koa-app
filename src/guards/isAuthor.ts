@@ -6,7 +6,7 @@ export const isAuthor = async (ctx: Context, next: Next) => {
     const user = ctx.state.user;
     if (!user) {
         ctx.status = 401;
-        ctx.body = createErrorResponse(ctx.status, 'Unathorized', {
+        ctx.body = createErrorResponse(ctx.status, 'Unauthorized', {
             message: 'Invalid or Missing User!'
         });
         return;
