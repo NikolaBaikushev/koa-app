@@ -14,10 +14,8 @@ export const errorControllerWrapper = (controller: (ctx: Context) => Promise<voi
                 return;
             }
 
-            ctx.log?.error?.(err); // works if using koa-pino-logger or similar
             ctx.status = 500;
             ctx.body = createErrorResponse(ctx.status, 'Something went wrong', {});
-
         }
     };
 };

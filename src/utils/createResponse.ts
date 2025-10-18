@@ -1,5 +1,5 @@
 
-type ErrorResponse = {
+export type ErrorResponse = {
     success: false;
     status: number;
     message: string;
@@ -7,7 +7,7 @@ type ErrorResponse = {
     data?: never;
 };
 
-type FailResponse = {
+export type FailResponse = {
     success: false;
     status: number;
     message: string;
@@ -15,7 +15,7 @@ type FailResponse = {
     errors?: never; 
 };
 
-type SuccessResponse<T> = {
+export type SuccessResponse<T> = {
     success: true;
     status: number;
     message: string;
