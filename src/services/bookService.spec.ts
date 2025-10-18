@@ -4,6 +4,8 @@ import { CreateBookPayload, UpdateBookPayload } from '../schemas/bookSchemas';
 import { BookEntity } from '../schemas/models/bookEntitySchema';
 import { bookService } from './bookService';
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 describe('bookService', () => {
     const repository = RepositoryManager.BooksRepository;
 

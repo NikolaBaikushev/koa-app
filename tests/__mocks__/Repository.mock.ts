@@ -1,5 +1,8 @@
 
 import {KnexRepository} from '../../src/repository/Repository';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 type AsyncFn<T> = jest.Mock<Promise<T>, any[]>;
 
 export class MockKnexRepository<T> implements Partial<KnexRepository<T>> {

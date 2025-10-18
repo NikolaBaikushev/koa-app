@@ -5,6 +5,7 @@ import * as createTokenUtil from '../utils/createToken';
 import { CustomHttpError } from '../common/HttpError';
 import { LoginUserPayload, RegisterUserPayload } from '../schemas/authSchemas';
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 describe('authService', () => {
     const usersRepository = RepositoryManager.UsersRepository;

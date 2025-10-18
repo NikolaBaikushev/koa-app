@@ -9,6 +9,9 @@ import * as isHttpModule from '../types/guards/isHttpError';
 import * as createResponseModule from './createResponse';
 import { CustomHttpError } from '../common/HttpError';
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+
 jest.mock('jsonwebtoken', () => ({
     sign: jest.fn()
 }));

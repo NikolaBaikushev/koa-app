@@ -4,6 +4,8 @@ import { UserBookEntity } from '../schemas/models/userBookEntitySchema';
 import { UserEntity } from '../schemas/models/userEntitySchema';
 import { userService } from './userService';
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 describe('userService', () => {
     const repository = RepositoryManager.UsersRepository;
     const usersBooksRepository = RepositoryManager.UsersBooksRepository;
