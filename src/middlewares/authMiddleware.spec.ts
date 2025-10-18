@@ -2,44 +2,44 @@
 
 import { authMiddleware } from '../middlewares/authMiddleware';
 import passport from '../config/authConfig';
-import { Context } from 'koa';
+import { Context, Next } from 'koa';
 import { createErrorResponse } from '../utils/createResponse';
+import { UserEntity } from '../schemas/models/userEntitySchema';
 
 jest.mock('../config/authConfig');
 
-const mockedPassport = passport as jest.Mocked<typeof passport>;
 
 describe('authMiddleware', () => {
     let ctx: Partial<Context>;
-    let next: jest.Mock;
+    let next = jest.fn() as Next;
 
     beforeEach(() => {
         ctx = {
             state: {} as any,
         };
-        next = jest.fn();
     });
 
-    it('should authenticate and call next when user is valid', async () => {
-        const fakeUser = { id: '123', name: 'Test User' };
+    afterEach(() => jest.clearAllMocks())
 
-        // Mock passport.authenticate to simulate a valid user
-        mockedPassport.authenticate.mockImplementation((strategy, options, callback) => {
+    it('should authenticate and call next when user is valid', async () => {
+        const user = { id: 1, username: 'asd' } as UserEntity;
+
+        jest.spyOn(passport, 'authenticate').mockImplementation((strategy, options, callback) => {
             return (ctx: any, next: any) => {
-                callback!(null, fakeUser, null);
+                callback!(null, user, null);
             };
         });
 
         await authMiddleware(ctx as Context, next);
 
-        expect(ctx.state!.user).toEqual(fakeUser);
+        expect(ctx.state!.user).toEqual(user);
         expect(next).toHaveBeenCalled();
     });
 
     it('should return 401 when user is invalid', async () => {
-        mockedPassport.authenticate.mockImplementation((strategy, options, callback) => {
+        jest.spyOn(passport, 'authenticate').mockImplementation((strategy, options, callback) => {
             return (ctx: any, next: any) => {
-                callback!(null, null, { message: 'Invalid token' });
+                callback!(null, null, null);
             };
         });
 
@@ -55,7 +55,7 @@ describe('authMiddleware', () => {
     it('should return 500 when there is an error', async () => {
         const error = new Error('Something went wrong');
 
-        mockedPassport.authenticate.mockImplementation((strategy, options, callback) => {
+        jest.spyOn(passport, 'authenticate').mockImplementation((strategy, options, callback) => {
             return (ctx: any, next: any) => {
                 callback!(error, null, null);
             };
