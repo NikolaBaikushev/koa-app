@@ -16,7 +16,7 @@ const getAllBooks = async (ctx: Context) => {
 const getCurrentUserBooks = async (ctx: Context) => {
     ctx.status = 200;
     const books = await bookService.getBooksByUserId(ctx.state.user.id);
-    ctx.body = createSuccessResponse(ctx.status, 'Get books', books);
+    ctx.body = createSuccessResponse(ctx.status, '', books);
 };
 
 const getBookById = async (ctx: Context) => {

@@ -2,8 +2,12 @@ import { Context } from "koa";
 import { LoginUserPayload, RegisterUserPayload } from "../../schemas/authSchemas";
 import { authService } from "../../services/authService";
 import { authController } from "./authController";
-import * as ctxDataModule from '../../utils/getContextStateData';
+import * as getContextStateDataModule from '../../utils/getContextStateData';
 import { User, UserEntity, UserRole } from "../../schemas/models/userEntitySchema";
+
+
+const controller = authController;
+const service = authService;
 
 describe('authController', () => {
     let ctx: Context;
@@ -15,7 +19,7 @@ describe('authController', () => {
             status: undefined,
             body: undefined,
             state: undefined,
-            data: {}
+            data: undefined
         } as unknown as Context;
     })
 
@@ -23,12 +27,12 @@ describe('authController', () => {
         it('should properly call the loginUser', async () => {
             const payload = { username: 'asd', password: 'asd' } as LoginUserPayload;
             const token = 'asdasdasd'
-            jest.spyOn(authService, 'loginUser').mockResolvedValue(token);
-            jest.spyOn(ctxDataModule, 'getContextStateData').mockReturnValue(payload);
+            jest.spyOn(service, 'loginUser').mockResolvedValue(token);
+            jest.spyOn(getContextStateDataModule, 'getContextStateData').mockReturnValue(payload);
 
-            await authController.loginUser(ctx as Context);
+            await controller.loginUser(ctx as Context);
 
-            expect(authService.loginUser).toHaveBeenCalledWith(payload);
+            expect(service.loginUser).toHaveBeenCalledWith(payload);
             expect(ctx.status).toEqual(201)
             expect(ctx.body).toMatchObject({
                 success: true,
@@ -50,12 +54,12 @@ describe('authController', () => {
                 username: 'asd'
             }
 
-            jest.spyOn(authService, 'registerUser').mockResolvedValue(user as UserEntity);
-            jest.spyOn(ctxDataModule, 'getContextStateData').mockReturnValue(payload);
+            jest.spyOn(service, 'registerUser').mockResolvedValue(user as UserEntity);
+            jest.spyOn(getContextStateDataModule, 'getContextStateData').mockReturnValue(payload);
 
-            await authController.registerUser(ctx as Context);
+            await controller.registerUser(ctx as Context);
 
-            expect(authService.registerUser).toHaveBeenCalledWith(payload);
+            expect(service.registerUser).toHaveBeenCalledWith(payload);
             expect(ctx.status).toEqual(201)
             expect(ctx.body).toMatchObject({
                 success: true,
