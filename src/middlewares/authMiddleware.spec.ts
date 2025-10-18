@@ -1,5 +1,3 @@
-// tests/authMiddleware.test.ts
-
 import { authMiddleware } from '../middlewares/authMiddleware';
 import passport from '../config/authConfig';
 import { Context, Next } from 'koa';
@@ -11,7 +9,7 @@ jest.mock('../config/authConfig');
 
 describe('authMiddleware', () => {
     let ctx: Partial<Context>;
-    let next = jest.fn() as Next;
+    const next = jest.fn() as Next;
 
     beforeEach(() => {
         ctx = {
@@ -19,7 +17,7 @@ describe('authMiddleware', () => {
         };
     });
 
-    afterEach(() => jest.clearAllMocks())
+    afterEach(() => jest.clearAllMocks());
 
     it('should authenticate and call next when user is valid', async () => {
         const user = { id: 1, username: 'asd' } as UserEntity;

@@ -5,18 +5,13 @@ import { Context, Next } from 'koa';
 
 
 describe('validationMiddleware', () => {
-    // const schema = z.object({
-    //     name: z.string(),
-    //     age: z.number().int().positive(),
-    // });
-
     const schema = z.object({
         title: z.string().nonempty('Title cannot be empty!'),
         author: z.string().nonempty('Authro cannot be empty!'),
     });
 
     let ctx: Context;
-    let next = jest.fn() as Next;
+    const next = jest.fn() as Next;
 
     beforeEach(() => {
         ctx = {
@@ -28,7 +23,7 @@ describe('validationMiddleware', () => {
 
     });
 
-    afterEach(() => jest.clearAllMocks())
+    afterEach(() => jest.clearAllMocks());
 
     it('calls next and sets parsed data when validation succeeds', async () => {
         ctx.request.body = { title: 'asd', author: 'asd asd asd' };

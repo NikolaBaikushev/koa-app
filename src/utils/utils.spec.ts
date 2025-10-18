@@ -6,33 +6,33 @@ import { User, UserRole } from '../schemas/models/userEntitySchema';
 import { createToken, JwtTokenPayload } from './createToken';
 import { errorControllerWrapper } from './errorHandlerWrapper';
 import * as isHttpModule from '../types/guards/isHttpError';
-import * as createResponseModule from './createResponse'
+import * as createResponseModule from './createResponse';
 import { CustomHttpError } from '../common/HttpError';
 
 jest.mock('jsonwebtoken', () => ({
     sign: jest.fn()
-}))
+}));
 
 describe('utils', () => {
     afterEach(() => {
         jest.clearAllMocks();
-        jest.resetAllMocks();     // resets mock state
+        jest.resetAllMocks();
         jest.restoreAllMocks();
-    })
+    });
     describe('createToken', () => {
         it('should return a string token', async () => {
             const payload = {} as JwtTokenPayload;
             createToken(payload);
-            expect(jwt.sign).toHaveBeenCalledWith(payload, config.SECRET, { expiresIn: '1h' })
-        })
-    })
+            expect(jwt.sign).toHaveBeenCalledWith(payload, config.SECRET, { expiresIn: '1h' });
+        });
+    });
 
     describe('getContextStateData', () => {
         let ctx = {} as Context;
 
         beforeEach(() => {
             ctx = { state: {} } as any;
-        })
+        });
 
         it('should throw error if don\'t have data on state', async () => {
             try {
@@ -41,18 +41,18 @@ describe('utils', () => {
                 expect(err).toBeInstanceOf(Error);
                 expect(err.message).toEqual('Context doesn\'t have "data"');
             }
-        })
+        });
         it('should return the context state data with proper type', async () => {
             const user: User = {
                 username: 'asd',
                 role: UserRole.USER,
                 id: 1
-            }
-            ctx.state.data = { user }
+            };
+            ctx.state.data = { user };
             const result = getContextStateData<User>(ctx);
             expect(result).toMatchObject(ctx.state.data as any);
-        })
-    })
+        });
+    });
 
     describe('errorHandlerWrapper', () => {
         let ctx: Partial<Context>;
@@ -66,8 +66,8 @@ describe('utils', () => {
         });
 
         afterEach(() => {
-            jest.clearAllMocks()
-            jest.resetAllMocks()
+            jest.clearAllMocks();
+            jest.resetAllMocks();
         }
         );
 
@@ -89,7 +89,7 @@ describe('utils', () => {
             const failResponse = { success: false, status: 404, message: 'Not Found' } as createResponseModule.FailResponse;
 
             jest.spyOn(isHttpModule, 'isHttpError').mockReturnValue(true);
-            jest.spyOn(createResponseModule, 'createFailResponse').mockReturnValue(failResponse)
+            jest.spyOn(createResponseModule, 'createFailResponse').mockReturnValue(failResponse);
             const controller = jest.fn().mockImplementation(() => {
                 throw error;
             });
@@ -102,7 +102,7 @@ describe('utils', () => {
             expect(ctx.status).toBe(404);
             expect(ctx.body).toEqual(failResponse);
             expect(createResponseModule.createFailResponse).toHaveBeenCalledWith(404, 'Not Found');
-        })
+        });
 
         it('should handle non-HTTP error correctly', async () => {
             const error = new Error();
@@ -129,7 +129,7 @@ describe('utils', () => {
             expect(ctx.body).toEqual(errorResponse);
             expect(createResponseModule.createErrorResponse).toHaveBeenCalledWith(500, 'Something went wrong', {});
         });
-    })
+    });
 
     describe('createResponse', () => {
         afterEach(() => jest.clearAllMocks());
@@ -139,33 +139,33 @@ describe('utils', () => {
             const message = 'OK!';
             const data = {
                 user: { id: 1 }
-            }
+            };
             const result = createResponseModule.createSuccessResponse(status, message, data);
-            expect(result.status).toEqual(status)
-            expect(result.message).toEqual(message)
-            expect(result.data).toStrictEqual(data)
-            expect(result.success).toBe(true)
-        })
+            expect(result.status).toEqual(status);
+            expect(result.message).toEqual(message);
+            expect(result.data).toStrictEqual(data);
+            expect(result.success).toBe(true);
+        });
 
         it('should create fail response', () => {
             const status = 400;
             const message = 'OK!';
             const result = createResponseModule.createFailResponse(status, message);
-            expect(result.status).toEqual(status)
-            expect(result.message).toEqual(message)
-            expect(result.success).toBe(false)
-        })
+            expect(result.status).toEqual(status);
+            expect(result.message).toEqual(message);
+            expect(result.success).toBe(false);
+        });
 
         it('should create error response', () => {
             const status = 500;
             const message = 'Internal Server Error';
             const errors = {
                 message: 'Server Error'
-            }
+            };
             const result = createResponseModule.createErrorResponse(status, message, errors);
-            expect(result.status).toEqual(status)
-            expect(result.message).toEqual(message)
-            expect(result.success).toBe(false)
-        })
-    })
-})
+            expect(result.status).toEqual(status);
+            expect(result.message).toEqual(message);
+            expect(result.success).toBe(false);
+        });
+    });
+});
