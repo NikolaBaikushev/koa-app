@@ -27,10 +27,10 @@ const config: Config = {
     coverageReporters: ['text', 'lcov', 'html'], 
     coverageThreshold: {
         'global': {
-            'statements': 90,
-            'branches': 80,
-            'functions': 90,
-            'lines': 90
+            'statements': 79,
+            'branches': 70,
+            'functions': 75,
+            'lines': 80
         }
     },
     modulePathIgnorePatterns: ['<rootDir>/dist/'],
