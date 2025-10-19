@@ -57,7 +57,7 @@ describe('/v1/books', () => {
 
             const res = await request.get('/v1/books').set('Authorization', `Bearer ${token}`);
 
-            expect(res.status).toBe(201);
+            expect(res.status).toBe(200);
             expect(res.body).toHaveProperty('data');
             expect(res.body.data.length).toBe(expectedBooks.length);
         })

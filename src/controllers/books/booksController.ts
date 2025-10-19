@@ -22,7 +22,7 @@ const getCurrentUserBooks = async (ctx: Context) => {
 const getBookById = async (ctx: Context) => {
     const { id } = validateParams(ctx, ParamsSchema);
     const book = await bookService.getBookById(id);
-    ctx.status = 200;
+    ctx.status = 201;
     ctx.body = createSuccessResponse(ctx.status, '', book);
 };
 
