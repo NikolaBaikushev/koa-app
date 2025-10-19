@@ -1,5 +1,6 @@
 import { CustomHttpError } from '../common/HttpError';
 import { RepositoryManager } from '../repository/RepositoryManager';
+import { BookEntity } from '../schemas/models/bookEntitySchema';
 import { UserBookEntity } from '../schemas/models/userBookEntitySchema';
 import { UserEntity } from '../schemas/models/userEntitySchema';
 import { userService } from './userService';
@@ -13,6 +14,7 @@ describe('userService', () => {
     afterEach(() => jest.clearAllMocks());
 
     describe('userService.getUserById', () => {
+        afterEach(() => jest.clearAllMocks());
         it('should return user', async () => {
             const id = 1;
             jest.spyOn(repository, 'findById').mockResolvedValue({ id: id, username: 'asd' } as UserEntity);
@@ -41,12 +43,11 @@ describe('userService', () => {
     describe('userService.addBookToUser', () => {
         const userId = 1;
         const bookId = 1;
+
+        afterEach(() => jest.clearAllMocks());
         
         it('should add book to user', async () => {
-           
-
             const createResult = { user_id: userId, book_id: bookId } as UserBookEntity;
-            
             
             jest.spyOn(repository, 'findById').mockResolvedValue({id: userId} as UserEntity);
             jest.spyOn(usersBooksRepository, 'findOneBy').mockResolvedValue(null);
@@ -76,7 +77,7 @@ describe('userService', () => {
 
         it('should throw error when user already has the book', async () => {
             jest.spyOn(repository, 'findById').mockResolvedValue({id: userId} as UserEntity);
-            jest.spyOn(usersBooksRepository, 'findOneBy').mockResolvedValue(null);
+            jest.spyOn(usersBooksRepository, 'findOneBy').mockResolvedValue({user_id: 1, book_id: 1} as UserBookEntity);
 
             try {
                 await userService.addBookToUser(bookId, userId);
@@ -92,6 +93,8 @@ describe('userService', () => {
     describe('userService.removeBookFromUser', () => {
         const userId = 1;
         const bookId = 1;
+
+        afterEach(() => jest.clearAllMocks());
         
         it('should remove book from user', async () => {
             const returned = { user_id: userId, book_id: bookId } as UserBookEntity;

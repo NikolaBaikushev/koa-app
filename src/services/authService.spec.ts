@@ -8,7 +8,7 @@ import { LoginUserPayload, RegisterUserPayload } from '../schemas/authSchemas';
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 describe('authService', () => {
-    const usersRepository = RepositoryManager.UsersRepository;
+    const repository = RepositoryManager.UsersRepository;
 
     afterEach(() => {
         jest.restoreAllMocks();
@@ -16,6 +16,7 @@ describe('authService', () => {
     });
 
     describe('authService.loginUser', () => {
+        afterEach(() => jest.clearAllMocks());
         const user = {
             id: 1,
             username: 'testuser',
@@ -24,7 +25,7 @@ describe('authService', () => {
         } as UserEntity;
 
         it('should return a JWT token when user is found', async () => {
-            jest.spyOn(usersRepository, 'findOneBy').mockResolvedValue(user);
+            jest.spyOn(repository, 'findOneBy').mockResolvedValue(user);
             jest.spyOn(createTokenUtil, 'createToken').mockReturnValue('some_token_name');
 
             const payload: LoginUserPayload = {
@@ -35,13 +36,13 @@ describe('authService', () => {
             const result = await authService.loginUser(payload);
 
             expect(result).toEqual('some_token_name');
-            
-            expect(usersRepository.findOneBy).toHaveBeenCalledWith(payload);
+
+            expect(repository.findOneBy).toHaveBeenCalledWith(payload);
             expect(createTokenUtil.createToken).toHaveBeenCalled();
         });
 
         it('should throw CustomHttpError 401 when user not found', async () => {
-            jest.spyOn(usersRepository, 'findOneBy').mockResolvedValue(null);
+            jest.spyOn(repository, 'findOneBy').mockResolvedValue(null);
 
             try {
                 await authService.loginUser({} as UserEntity);
@@ -52,8 +53,10 @@ describe('authService', () => {
             }
         });
     });
-    
+
     describe('authService.registerUser', () => {
+        afterEach(() => jest.clearAllMocks());
+
         it('should create user', async () => {
             const user = {
                 id: 1,
@@ -68,12 +71,12 @@ describe('authService', () => {
                 confirmPassword: 'asd'
             } as RegisterUserPayload;
 
-            jest.spyOn(usersRepository, 'create').mockResolvedValue(user);
-            jest.spyOn(usersRepository, 'findOneBy').mockResolvedValue(null);
+            jest.spyOn(repository, 'create').mockResolvedValue(user);
+            jest.spyOn(repository, 'findOneBy').mockResolvedValue(null);
 
             const result = await authService.registerUser(payload);
 
-            expect(usersRepository.create).toHaveBeenCalledWith({
+            expect(repository.create).toHaveBeenCalledWith({
                 username: payload.username,
                 password: payload.password,
                 role: payload.role
@@ -103,7 +106,7 @@ describe('authService', () => {
         it('should throw if user already exists', async () => {
             const payload = {} as RegisterUserPayload;
 
-            jest.spyOn(usersRepository, 'findOneBy').mockResolvedValue({} as UserEntity);
+            jest.spyOn(repository, 'findOneBy').mockResolvedValue({} as UserEntity);
 
             try {
                 await authService.registerUser(payload);
@@ -117,4 +120,19 @@ describe('authService', () => {
             }
         });
     });
+
+    describe('authService.getUser', () => {
+        afterEach(() => jest.clearAllMocks());
+
+        it('should call and get the user', async () => {
+            const id = 1;
+            const username = 'asd';
+
+            jest.spyOn(repository, 'findOneBy').mockResolvedValue(null);
+
+            await authService.getUser(id, username);
+            expect(repository.findOneBy).toHaveBeenCalledWith({ username, id }, ['id', 'username', 'role'])
+        })
+
+    })
 });
