@@ -6,16 +6,17 @@
   "author": "",
   "main": "index.js",
   "scripts": {
-    "start": "NODE_ENV=development nodemon --exec ts-node src/app.ts",
-    "start:prod": "NODE_ENV=production nodemon --exec ts-node src/app.ts",
-    "build": "tsc",
+    "start": "NODE_ENV=development nodemon --exec ts-node src/server.ts",
+    "start:prod": "NODE_ENV=production nodemon --exec ts-node src/server.ts",
+    "build": "tsc -b",
     "lint": "eslint . --ext .ts --fix",
     "migrations:make": "knex migrate:make",
     "migrations": "knex migrate:latest",
     "seeds:make": "knex seed:make",
     "seeds": "knex seed:run",
-    "test": "jest --no-coverage",
-    "test:coverage": "jest --coverage"
+    "test": "NODE_ENV=test jest --no-coverage",
+    "test:coverage": "NODE_ENV=test jest --coverage",
+    "test:unit": "jest --config jest.unit.config.ts" 
   },
   "dependencies": {
     "@koa/bodyparser": "^6.0.0",
@@ -45,6 +46,7 @@
     "@types/koa-router": "^7.4.8",
     "@types/node": "^24.7.2",
     "@types/passport-jwt": "^4.0.1",
+    "@types/supertest": "^6.0.3",
     "eslint": "^9.37.0",
     "eslint-plugin-unused-imports": "^4.2.0",
     "globals": "^16.4.0",
@@ -52,6 +54,7 @@
     "jiti": "^2.6.1",
     "nodemon": "^3.1.10",
     "pino-pretty": "^13.1.2",
+    "supertest": "^7.1.4",
     "ts-jest": "^29.4.5",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3",

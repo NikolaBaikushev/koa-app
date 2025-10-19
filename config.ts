@@ -2,7 +2,9 @@
 import dotenv from 'dotenv';
 import z from 'zod';
 
-dotenv.config();
+const envPath = process.env.NODE_ENV === 'test' ? '.env.test' : '.env';
+
+dotenv.config({ path: envPath });
 
 const envSchema = z.object({
     PORT: z.string().min(4, '.env Varaiable PORT is required and must have atleast 4 digits'),

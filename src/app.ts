@@ -16,6 +16,6 @@ app.use(bodyParser());
 app.use(passport.initialize());
 app.use(router.routes()).use(router.allowedMethods());
 
-app.listen(config.PORT, () => {
-    console.log('Server is running! Listening ...');
-});
+export default app;
+
+
