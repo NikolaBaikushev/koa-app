@@ -55,3 +55,9 @@ After everything is setup properly you can run the following commands individual
 `npm test` - Runs all existing tests, unit and integration tests.
 
 `npm run test:coverage` - Runs all existing tests and shows the overall coverage.
+
+## Postman
+
+### [API Overview](https://www.postman.com/nikolabaikushev-9707178/koa-app/overview)
+
+Unfortunately, to send the requests, Postman requires you to have an account. 
