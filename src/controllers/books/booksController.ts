@@ -44,7 +44,7 @@ const updateBook = async (ctx: Context) => {
 const deleteBook = async (ctx: Context) => {
     const { id } = validateParams(ctx, ParamsSchema);
     const book = await bookService.deleteBook(id);
-    ctx.status = 200;
+    ctx.status = 201;
     ctx.body = createSuccessResponse(ctx.status, 'Successfully deleted book!', book);
 };
 

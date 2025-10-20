@@ -66,9 +66,9 @@ describe('bookController', () => {
             await controller.getCurrentUserBooks(ctx);
 
             expect(service.getBooksByUserId).toHaveBeenCalled();
-            expect(ctx.status).toEqual(200);
+            expect(ctx.status).toEqual(201);
             expect(ctx.body).toMatchObject({
-                status: 200,
+                status: 201,
                 success: true,
                 message: '',
                 data: { ...books }
@@ -91,9 +91,9 @@ describe('bookController', () => {
             await controller.getBookById(ctx);
 
             expect(service.getBookById).toHaveBeenCalled();
-            expect(ctx.status).toEqual(200);
+            expect(ctx.status).toEqual(201);
             expect(ctx.body).toMatchObject({
-                status: 200,
+                status: 201,
                 success: true,
                 message: '',
                 data: { ...book }
@@ -171,9 +171,9 @@ describe('bookController', () => {
             await controller.deleteBook(ctx);
 
             expect(service.deleteBook).toHaveBeenCalledWith(id);
-            expect(ctx.status).toEqual(200);
+            expect(ctx.status).toEqual(201);
             expect(ctx.body).toMatchObject({
-                status: 200,
+                status: 201,
                 success: true,
                 message: 'Successfully deleted book!',
                 data: book

@@ -6,6 +6,16 @@ import { UserRole } from "../../schemas/models/userEntitySchema";
 import { db } from "../../config/knex";
 import { getAccessToken } from '../../../tests/utils/getAccessToken';
 import { RepositoryManager } from "../../repository/RepositoryManager";
+import { BookEntity } from "../../schemas/models/bookEntitySchema";
+
+const BOOK = {
+    title: 'asd',
+    author: 'asd'
+}
+
+const DELETE_BOOK = async () => {
+    await db('books').where(BOOK).delete();
+}
 
 describe('/v1/books', () => {
     const request = supertest(app.callback());
@@ -34,24 +44,20 @@ describe('/v1/books', () => {
 
     describe('GET /:id', () => {
         it('should return book by id books', async () => {
-            const book = {
-                title: 'asd',
-                author: 'asd'
-            }
-            const insertedBook = await db('books').insert(book).returning('id').then(rows => rows[0])
+            const insertedBook = await db('books').insert(BOOK).returning('id').then(rows => rows[0])
 
             const res = await request.get(`/v1/books/${insertedBook.id}`).set('Authorization', `Bearer ${token}`);
 
-            expect(res.status).toBe(200);
+            expect(res.status).toBe(201);
             expect(res.body).toHaveProperty('success', true)
             expect(res.body).toHaveProperty('data', expect.objectContaining({
                 id: insertedBook.id,
-                ...book
+                ...BOOK
             }));
         });
 
         afterAll(async () => {
-            await db('books').where({ author: 'asd', title: 'asd' }).delete();
+            await DELETE_BOOK();
         })
     });
 
@@ -62,7 +68,7 @@ describe('/v1/books', () => {
 
             const res = await request.get('/v1/books').set('Authorization', `Bearer ${token}`);
 
-            expect(res.status).toBe(200);
+            expect(res.status).toBe(201);
             expect(res.body).toHaveProperty('data');
             expect(res.body.data.length).toBe(expectedBooks.length);
         })
@@ -70,11 +76,10 @@ describe('/v1/books', () => {
 
     describe('POST /', () => {
         afterAll(async () => {
-            await db('books').where({ author: 'asd', title: 'asd' }).delete();
+            await DELETE_BOOK();
         })
 
         it('should create book', async () => {
-
             const payload = {
                 title: 'asd',
                 author: 'asd'
@@ -107,21 +112,15 @@ describe('/v1/books', () => {
     })
 
 
-    describe.only('PUT /:id', () => {
+    describe('PUT /:id', () => {
 
         afterEach(async () => {
-                        await db('books').where({ author: 'asd', title: 'asd' }).delete();
-
+            await DELETE_BOOK();
         })
 
         it('should update book', async () => {
-            const book = {
-                title: 'asd',
-                author: 'asd'
-            }
-            const insertedBook = await db('books').insert(book).returning('id').then(rows => rows[0])
+            const insertedBook = await db('books').insert(BOOK).returning('id').then(rows => rows[0])
 
-            
             const updatePayload = {
                 title: 'Updated Book',
                 author: 'Updated Author'
@@ -143,12 +142,46 @@ describe('/v1/books', () => {
         })
 
         it('should not update book due to isAuthor guard', async () => {
-            const book = {
-                title: 'asd',
-                author: 'asd'
-            }
+            const insertedBook = await db('books').insert(BOOK).returning('id').then(rows => rows[0])
 
-            const insertedBook = await db('books').insert(book).returning('id').then(rows => rows[0])
+            const token = await getAccessToken(request, 'sony', 'sony');
+
+            const res = await request.put(`/v1/books/${insertedBook.id}`).set('Authorization', `Bearer ${token}`);
+
+            expect(res.status).toBe(403);
+            expect(res.body).toHaveProperty('errors', expect.objectContaining({
+                message: 'Only authors have access to this resource!'
+            }));
+            expect(res.body).toHaveProperty('message', 'Forbidden Resource')
+        })
+    })
+
+    describe('DELETE /:id', () => {
+        afterEach(async () => {
+            await DELETE_BOOK();
+        })
+
+        it('should delete book', async () => {
+            const insertedBook: BookEntity = await db('books').insert(BOOK).returning(['id', 'title', 'author']).then(rows => rows[0])
+
+            const res = await request.delete(`/v1/books/${insertedBook.id}`).set('Authorization', `Bearer ${token}`);
+
+            expect(res.status).toBe(201);
+            expect(res.body).toHaveProperty('data', expect.objectContaining({
+                id: insertedBook.id,
+                ...insertedBook,
+            }));
+
+            const deleted = await db('books').select('*').where({
+                title: insertedBook.title,
+                author: insertedBook.author
+            }).first() || undefined;
+
+            expect(deleted).toBeUndefined()
+        })
+
+        it('should not delete book due to isAuthor guard', async () => {
+            const insertedBook = await db('books').insert(BOOK).returning('*').then(rows => rows[0])
 
             const token = await getAccessToken(request, 'sony', 'sony');
 
