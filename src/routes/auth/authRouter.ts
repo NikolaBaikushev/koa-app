@@ -1,5 +1,4 @@
 import Router from '@koa/router';
-import { authMiddleware } from '../../middlewares/authMiddleware';
 import { validateBody } from '../../middlewares/validationMiddleware';
 import { LoginUserSchema, RegisterUserSchema } from '../../schemas/authSchemas';
 import { authController } from '../../controllers/auth/authController';

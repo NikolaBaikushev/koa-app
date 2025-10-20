@@ -45,7 +45,7 @@ export abstract class KnexRepository<T> implements BaseRepository<T> {
     }
 
     find(item: Partial<T>): Promise<T[]> {
-        return this.qb.select('*').where({ ...item })
+        return this.qb.select('*').where({ ...item });
 
     }
 

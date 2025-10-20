@@ -1,6 +1,5 @@
 import { CustomHttpError } from '../common/HttpError';
 import { RepositoryManager } from '../repository/RepositoryManager';
-import { BookEntity } from '../schemas/models/bookEntitySchema';
 import { UserBookEntity } from '../schemas/models/userBookEntitySchema';
 import { UserEntity } from '../schemas/models/userEntitySchema';
 import { userService } from './userService';

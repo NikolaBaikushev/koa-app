@@ -1,12 +1,12 @@
-import { Context } from "koa"
-import { validateParams } from "./validateParams"
-import z from "zod";
+import { Context } from 'koa';
+import { validateParams } from './validateParams';
+import z from 'zod';
 
 describe('validateParams', () => {
     let ctx: Context;
     const schema = z.object({
         title: z.string().nonempty(),
-    })
+    });
 
     beforeEach(() => {
         ctx = {
@@ -17,14 +17,14 @@ describe('validateParams', () => {
             },
             throw: jest.fn()
         } as unknown as Context;
-    })
+    });
 
-    afterEach(() => jest.clearAllMocks())
+    afterEach(() => jest.clearAllMocks());
 
     it('should properly run the validation', () => {
-        const spy = jest.spyOn(schema, 'safeParse').mockReturnValue({ success: true, data: ctx.params })
+        const spy = jest.spyOn(schema, 'safeParse').mockReturnValue({ success: true, data: ctx.params });
 
-        const result = validateParams(ctx, schema)
+        const result = validateParams(ctx, schema);
 
         const spyResult = spy.mock.results[0]?.value;
 
@@ -34,16 +34,16 @@ describe('validateParams', () => {
         expect(schema.safeParse).toHaveBeenCalledWith(ctx.params);
         expect(ctx.throw).not.toHaveBeenCalled();
         
-        expect(spyResult.success).toEqual(true)
-        expect(spyResult.data).toEqual(ctx.params)
-    })
+        expect(spyResult.success).toEqual(true);
+        expect(spyResult.data).toEqual(ctx.params);
+    });
 
     it('should fail the validation', () => {
-        const spy = jest.spyOn(schema, 'safeParse').mockReturnValue({ success: false, error: new z.ZodError([])} as any)
+        const spy = jest.spyOn(schema, 'safeParse').mockReturnValue({ success: false, error: new z.ZodError([])} as any);
 
-        ctx.params = {}
+        ctx.params = {};
 
-        const result = validateParams(ctx, schema)
+        const result = validateParams(ctx, schema);
 
         const spyResult = spy.mock.results[0]?.value;
 
@@ -52,8 +52,8 @@ describe('validateParams', () => {
         expect(schema.safeParse).toHaveBeenCalledWith(ctx.params);
         expect(ctx.throw).toHaveBeenCalledWith(400, 'Invalid URL Parameters');
         
-        expect(spyResult.success).toEqual(false)
+        expect(spyResult.success).toEqual(false);
         expect(spyResult.error).toBeDefined();
         expect(spyResult.data).toBeUndefined();
-    })
-})
+    });
+});

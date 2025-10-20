@@ -18,7 +18,7 @@ describe('bookService', () => {
 
             const result = await bookService.getAllBooks();
             expect(result).toBe(books);
-            expect(repository.getAll).toHaveBeenCalled()
+            expect(repository.getAll).toHaveBeenCalled();
         });
     });
 
@@ -31,7 +31,7 @@ describe('bookService', () => {
 
             const result = await bookService.getBookById(id);
             expect(result).toBe(book);
-            expect(repository.findById).toHaveBeenCalledWith(id)
+            expect(repository.findById).toHaveBeenCalledWith(id);
         });
 
         it('it should throw error if book is not found', async () => {
@@ -41,7 +41,7 @@ describe('bookService', () => {
 
             try {
                 await bookService.getBookById(id);
-                expect(repository.findById).toHaveBeenCalledWith(id)
+                expect(repository.findById).toHaveBeenCalledWith(id);
             } catch (err: any) {
                 expect(err).toBeInstanceOf(CustomHttpError);
                 expect(err.status).toEqual(404);

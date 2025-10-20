@@ -131,8 +131,8 @@ describe('authService', () => {
             jest.spyOn(repository, 'findOneBy').mockResolvedValue(null);
 
             await authService.getUser(id, username);
-            expect(repository.findOneBy).toHaveBeenCalledWith({ username, id }, ['id', 'username', 'role'])
-        })
+            expect(repository.findOneBy).toHaveBeenCalledWith({ username, id }, ['id', 'username', 'role']);
+        });
 
-    })
+    });
 });

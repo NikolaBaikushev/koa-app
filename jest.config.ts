@@ -4,9 +4,9 @@ const config: Config = {
     preset: 'ts-jest',
     testEnvironment: 'node',
     verbose: true,
-    setupFiles: ["<rootDir>/tests/setup/env.ts"],
+    setupFiles: ['<rootDir>/tests/setup/env.ts'],
     // setupFilesAfterEnv: ["<rootDir>/tests/setup/setup.ts"],
-    globalSetup: "<rootDir>/tests/setup/globalSetup.ts",
+    globalSetup: '<rootDir>/tests/setup/globalSetup.ts',
 
     testMatch: [
         '<rootDir>/src/**/*.spec.ts',
